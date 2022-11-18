@@ -10,6 +10,7 @@
 
 fetch  ("http://192.168.1.60:3000/api/products")
 .then(response => response.json())
+console.log(response);
 // formatage des données au format json
 .then((ProductsTable)=> {
 // formatage des données sous forme de tableau pour une question de lisibilité
