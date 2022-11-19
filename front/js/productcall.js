@@ -9,20 +9,19 @@ if((err) => {
 console.log('url=',document.location)
 //affichage dans console log du résultat
 const parsedUrl = new URL(window.location.href);
-let id = (parsedUrl.searchParams.get("_id"));
+let id = (parsedUrl.searchParams.get("_id"))
 console.log('id=',id);
-// affichage dans console log du résultat
+console.log(id);
+let idProduit = parsedUrl.searchParams.get("products");
+// affich1age dans console log du résultat
 // récupération de l'id affiché à l'écran ( qui correspond au produit sur lequel l'utilisateur à cliqué)
 // source : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
 
-fetch  ("http://192.168.1.60:3000/api/products")
-.then(response => response.json())
-.then( json => console.log(json))
+    //let response = fetch(`http://192.168.1.63:5500/front/html/product.html?${id}`)
+    //const produtcs = (await response).json();
+    //console.log(produtcs); 
 
-console.log(items)
-const idProduitSelection = items.find((element)=> element._id === _id);
-console.log(idProduitSelection);
-
+//loadNames();
 
 
 

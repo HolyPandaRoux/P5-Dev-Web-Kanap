@@ -8,11 +8,10 @@
 //let article of index, 
 //rajout au html existant des éléments article de l'index avec en rajout le selector correspondant à la ligne de tableau voulue.
 
-fetch  ("http://192.168.1.60:3000/api/products")
+fetch  ("http://192.168.1.63:3000/api/products")
 .then(response => response.json())
-console.log(response);
 // formatage des données au format json
-.then((ProductsTable)=> {
+.then((ProductsTable) => {
 // formatage des données sous forme de tableau pour une question de lisibilité
     console.table(ProductsTable);
     allItems(ProductsTable);
