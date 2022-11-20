@@ -1,22 +1,25 @@
 
-window.write(window.location)
-// récupération de l'url actuelle de la page affiché
-// source : https://developer.mozilla.org/fr/docs/Web/API/Document/location
-if((err) => {
-    document.querySelector(".item").innerHTML = "<h1>erreur 404</h1>";
-    console.log("vérifier accés/état serveur échec chargement url " + err)});
-// message d'erreur en cas d'échec de chargement de l'url
-console.log('url=',document.location)
-//affichage dans console log du résultat
+
 const parsedUrl = new URL(window.location.href);
-let newParams = (parsedUrl.searchParams.get("_id"))
-console.log('id=',id)
- let ProductPage = new URL (`http://192.168.1.63:5500/front/html/product.html?_id=${id}}`)
-
+let id = (parsedUrl.searchParams.get("_id"));
+console.log('id=',id);
+// affichage dans console log du résultat
+// récupération de l'id affiché à l'écran ( qui correspond au produit sur lequel l'utilisateur à cliqué)
+// source : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
 // récupération de l'id affiché à l'
-écran ( qui correspond au produit sur lequel l'utilisateur à cliqué)
 
-
+fetch  (`http://localhost:3000/api/products/${id}`)
+.then(response => response.json())
+// formatage des données au format json
+.then((product)=> {
+// formatage des données sous forme de tableau pour une question de lisibilité
+    console.table(product);
+})
+.catch((error ) => {
+// en cas d'erreur un message d'erreur 404 apparait sur le bloc faisant défaut plus mentions des sources potentielless d'erreur dans le console.log
+document.querySelector(".titles").innerHTML = "<h3> erreur 404 failed to get data from API check console log</h3>";
+console.log("erreur 404 Vérifier le statut du serveur /  fonction fetch / api data"+er);
+});
 //let response = fetch(`http://192.168.1.63:5500/front/html/product.html?${id}`)
 //const produtcs = (await response).json();
 //console.log(produtcs); 
