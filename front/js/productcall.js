@@ -1,5 +1,7 @@
 
 
+
+
 const parsedUrl = new URL(window.location.href);
 let id = (parsedUrl.searchParams.get("_id"));
 console.log('id=', id);
@@ -7,28 +9,31 @@ console.log('id=', id);
 // récupération de l'id affiché à l'écran ( qui correspond au produit sur lequel l'utilisateur à cliqué)
 // source : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
 // récupération de l'id affiché à l'
-
+let productSelected = function () {
 fetch(`http://localhost:3000/api/products/${id}`)
     .then(response => response.json())
     // formatage des données au format json
-    .then((product) => {
-        // formatage des données sous forme de tableau pour une question de lisibilité
-        console.table(product);
-    })
-    .catch(() => {
-        // en cas d'erreur un message d'erreur 404 apparait sur le bloc faisant défaut plus mentions des sources potentielless d'erreur dans le console.log
-        console.log("erreur 404 Vérifier le statut du serveur /  fonction fetch / api data" + er);
-    });
+          //  fetch(objectURL)
+           //   .then((response) => response.json())
+        .then((product) => {
+                console.log(product);
+                let img               = document.querySelector(".item__img");
+                let name              = document.getElementById("title");
+                let title             = document.querySelector("title");
+                let price             = document.getElementById("price");
+                let description       = document.getElementById("description");
+                let color             = document.getElementById("colors");
 
-for 'product' in id (element => {
-    function affichageproduit(_id) {
-        let name = document.getElementById('#title').innerHTML;
-        let description = document.getElementById('#description').innerHTML;
-        let price = document.getElementById('#price').innerHTML;
-        let rating = document.getElementById('#rating').innerHTML;
-        let url = document.getElementById('url+id').innerHTML;
-        let imageUrl = document.getElementById('#imageUrl');
-
-    
-	}}
-);  
+                img.innerHTML            = `<img src="
+                                            ${product.imageUrl}" alt="
+                                            ${product.altTxt}">`;
+                name.innerHTML           = `${product.name}`;
+                title.innerHTML          = `${product.name}`;
+                price.innerHTML          = `${product.price}`;
+                description.innerHTML    = `${product.description}`;
+                for (i = 0; i < product.colors.length; i++) {
+                color.innerHTML += `<option value="${product.colors[i]}">${product.colors[i]}</option>`;
+                }
+            });
+        };
+        productSelected();
