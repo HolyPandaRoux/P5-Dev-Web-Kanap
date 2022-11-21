@@ -8,7 +8,6 @@ console.log('id=', id);
 // affichage dans console log du résultat
 // récupération de l'id affiché à l'écran ( qui correspond au produit sur lequel l'utilisateur à cliqué)
 // source : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
-// récupération de l'id affiché à l'
 let productSelected = function () {
 fetch(`http://localhost:3000/api/products/${id}`)
     .then(response => response.json())
@@ -31,6 +30,8 @@ fetch(`http://localhost:3000/api/products/${id}`)
                 title.innerHTML          = `${product.name}`;
                 price.innerHTML          = `${product.price}`;
                 description.innerHTML    = `${product.description}`;
+
+
                 for (i = 0; i < product.colors.length; i++) {
                 color.innerHTML += `<option value="${product.colors[i]}">${product.colors[i]}</option>`;
                 }
