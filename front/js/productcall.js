@@ -37,3 +37,12 @@ fetch(`http://localhost:3000/api/products/${id}`)
             });
         };
         productSelected();
+
+function quantityValue() {
+let quantity = document.querySelector("quantity");
+return quantity.value};
+
+
+function colorChoice() {
+let color = document.querySelector("colors");
+return color.value};
