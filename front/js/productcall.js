@@ -47,3 +47,39 @@ return quantity.value};
 function colorChoice() {
 let color = document.querySelector("colors");
 return color.value};
+
+$(".BuyForm .AddToCart").on("click", function(event) {
+	event.preventDefault();
+
+	/*
+	* The purchase form is saved
+	*/
+	var $form = $(this).closest(".BuyForm");
+
+	/*
+	* A POST request is sent
+	*/
+	$.ajax({
+		type: "POST",
+		url: "/cart",
+
+		/*
+		* The serializeObject function is used to format the data on the server
+		* into processable form.
+		*/
+		data: $form.serializeObject(),
+		success: function() {
+
+			/*
+			* Finally, the shopping cart is updated after the product has been added.
+			*/
+			$.ajax({
+				type: "GET",
+				url: "/interface/MiniCart",
+				success: function(data) {
+					$(".MiniCartContainer").html(data);
+				}
+			});
+		}
+	});
+});
