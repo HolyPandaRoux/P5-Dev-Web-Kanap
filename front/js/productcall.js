@@ -9,40 +9,54 @@ console.log('id=', id);
 // récupération de l'id affiché à l'écran ( qui correspond au produit sur lequel l'utilisateur à cliqué)
 // source : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
 let productSelected = function () {
-fetch(`http://localhost:3000/api/products/${id}`)
-    .then(response => response.json())
-    // formatage des données au format json
-          //  fetch(objectURL)
-           //   .then((response) => response.json())
+    fetch(`http://localhost:3000/api/products/${id}`)
+        .then(response => response.json())
+        //   .then((response) => response.json())
         .then((product) => {
-                console.log(product);
-                let img               = document.querySelector(".item__img");
-                let name              = document.getElementById("title");
-                let title             = document.querySelector("title");
-                let price             = document.getElementById("price");
-                let description       = document.getElementById("description");
-                let color             = document.getElementById("colors");
+            console.log(product);
+            let img = document.querySelector(".item__img");
+            let name = document.getElementById("title");
+            let title = document.querySelector("title");
+            let price = document.getElementById("price");
+            let description = document.getElementById("description");
+            let color = document.getElementById("colors");
 
-                img.innerHTML            = `<img src="
+            img.innerHTML = `<img src="
                                             ${product.imageUrl}" alt="
                                             ${product.altTxt}">`;
-                name.innerHTML           = `${product.name}`;
-                title.innerHTML          = `${product.name}`;
-                price.innerHTML          = `${product.price}`;
-                description.innerHTML    = `${product.description}`;
-
-
-                for (i = 0; i < product.colors.length; i++) {
+            name.innerHTML = `${product.name}`;
+            title.innerHTML = `${product.name}`;
+            price.innerHTML = `${product.price}`;
+            description.innerHTML = `${product.description}`;
+            for (i = 0; i < product.colors.length; i++) {
                 color.innerHTML += `<option value="${product.colors[i]}">${product.colors[i]}</option>`;
-                }
-            });
-        };
-        productSelected();
+            }
+        });
+};
+productSelected();
+Cart = new []
+
+function allSelectedOptions() {
+
+    const itemQuantity   = parseInt(document.getElementById("quantity").value);
+    const colors         = document.getElementById("colors");
+    const colorSelected  = colors.options[colors.selectedIndex].value;
+    const itemPrice      = document.getElementById("price");
 
 
 
+    if (colorSelected == "" || quantityChoose == 0) {
+        console.error("Tous les champs sont obligatoires");
+    } else {
+        
+        addToCart(quantityChoose, colorSelected);
+    }   
+}
+allSelectedOptions()
 
 
-		// add to cart
-function AddToCart(id){
-	console.log(id);}
+// add to cart
+document.getElementById('addToCart').onclick = (event) => {
+    event.preventDefault()
+    cart.addProduct(product)
+}
