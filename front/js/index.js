@@ -1,33 +1,18 @@
-/* script pour récupérer les données du serveur par le biais de Fetch et stockage de celle ci dans la variable Returned Answer avant réutilisation*/
-// Fetch
-// response => Json
-// Json => table 
-// module d'erreur
-// fonction d'affichage des produits
-// displayZone correspond à la const/let qui contiendra l'affichage des produits
-//let article of index, 
-//rajout au html existant des éléments article de l'index avec en rajout le selector correspondant à la ligne de tableau voulue.
 
-/**
- * It's a function that takes an array of objects as an argument, and then loops through the array and
- * displays each object's properties in a HTML template.
- * @param index - the array of objects that you want to loop through
- */
-/* It's a function that takes an array of objects as an argument, and then loops through the array and
-displays each object's properties in a HTML template. */
+
+
+
+
+
+
+
+
 fetch  ("http://192.168.1.60:3000/api/products")
 .then(response => response.json())
 .then((ProductsTable) => {
     console.table(ProductsTable);
     allItems(ProductsTable);
 })
-
-fetch  ("http://192.168.1.60:3000/api/products")
-.then(response => response.json())
-.then((ProductsTable) => {
-    console.table(ProductsTable);
-    allItems(ProductsTable);
-}) */
 
 .catch((error ) => {
 document.querySelector(".titles").innerHTML = "<h3> erreur 404 failed to get data from API check console log</h3>";

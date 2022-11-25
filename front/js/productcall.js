@@ -38,45 +38,4 @@ function productCalling() {
     productSelected();
 
 
-    const parsedProductUrl = new URL(window.location.href);
-    let productId = (parsedProductUrl.searchParams.get("_id"));
-    console.log('id=', productId);
-    const quantitySelected = document.getElementById('quantity');
-    const colorSelected = document.getElementById('colors');
-
-    const addToCart = document.getElementById('addToCart');
-    addToCart.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        const selection = {
-            id: productId,
-            img: productId.imageURL,
-            alt: productId.altTxt,
-            name: title.textContent,
-            price: price.textContent,
-            color: colorSelected.value,
-            quantity: quantitySelected.value,
-        };
-
-        let productInLocalStorage = JSON.parse(localStorage.getItem('product'));
-
-        const addProductLocalStorage = () => {
-
-            productInLocalStorage.push(selection);
-            localStorage.setItem('product', JSON.stringify(productInLocalStorage));
-        };
-        let addConfirm = () => {
-            alert('Votre sélection a bien était ajoutée à votre panier');
-        };
-
-        let update = false;
-
-
-        localStorage.setItem('product', JSON.stringify(productInLocalStorage));
-        addProductLocalStorage();
-        addConfirm();
-        productInLocalStorage = [];
-        addProductLocalStorage();
-        addConfirm();
-    });
 }
