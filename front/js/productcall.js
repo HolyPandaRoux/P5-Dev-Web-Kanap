@@ -2,8 +2,6 @@
 /*  */
 
 
-
-
 productCalling();
 
 function productCalling() {

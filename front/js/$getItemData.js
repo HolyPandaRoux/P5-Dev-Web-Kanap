@@ -1,31 +1,45 @@
+
+
 function $getItemData() {
 	fetch("http://192.168.1.60:3000/api/products")
 		.then(response => response.json())
 		.then((ProductsTable) => {
 			console.table(ProductsTable);
+		if(res.ok){
+			return res.json();
+		}
+
+function send(e) {
+				e.preventDefault();
+				fetch("https://localhost:3000/api/", {
+					method: "POST",
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ value: document.getElementById("value").value })
+				})
+					.then(function (res) {
+						if (res.ok) {
+							return res.json();
+						}
+					})
+					.then(function (value) {
+						document
+							.getElementById("result")
+							.innerText = value.postData.text;
+					});
+			}
+
+			document
+				.getElementById("form")
+				.addEventListener("submit", send);
+
+
+
+
 		});
-	const cart = [];
-	const obj = {
-		selectedName: document.getElementById('title'),
-		selectedDescription: document.getElementById('description'),
-		selectedPrice: document.getElementById('price'),
-		selectedImage: document.getElementById('.item__img'),
-		selectedAltTxt: document.getElementById('altTxt'),
-		selectedQuantity: document.getElementById('quantity'),
-		selectedAltTxt: document.getElementById('altTxt'),
 
-	};
-
-	const addToCartButton = document.getElementById('addToCart');
-
-
-
-	function $addItem(selectedName, selectedDescription, selectedPrice, selectedImage, selectedAltTxt, selectedQuantity, selectedTxt) {
-		cart.push(selectedName, selectedDescription, selectedPrice, selectedImage, selectedAltTxt, selectedQuantity, selectedTxt);
-	}
-
-	function $ShowCart() {
-	}
 
 	addToCartButton.addEventListener('click', () => {
 		addItem(getAttribute('id'),
