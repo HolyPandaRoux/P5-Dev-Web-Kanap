@@ -7,7 +7,7 @@
 
 
 
-fetch  ("http://192.168.1.60:3000/api/products")
+fetch  ("http://localhost:3000/api/products")
 .then(response => response.json())
 .then((ProductsTable) => {
     console.table(ProductsTable);

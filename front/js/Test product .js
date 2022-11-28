@@ -61,3 +61,121 @@ for (let article of _id) {
 
 
 
+
+
+function $getItemData() {
+	fetch("http://192.168.1.60:3000/api/products")
+		.then(response => response.json())
+		.then((ProductsTable) => {
+			console.table(ProductsTable);
+		if(res.ok){
+			return res.json();
+		}
+		
+
+function send(e) {
+				e.preventDefault();
+				fetch("https://localhost:3000/api/", {
+					method: "POST",
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ value: document.getElementById("value").value })
+				})
+					.then(function (res) {
+						if (res.ok) {
+							return res.json();
+						}
+					})
+					.then(function (value) {
+						document
+							.getElementById("result")
+							.innerText = value.postData.text;
+							console.log(value.postData.text);
+					});
+			}
+
+
+
+
+/*const button = document.querySelector("addToCart");
+button.addEventListener('click',(event) => {});
+onclick = function (_event) { document.addEventListener("DOMContentLoaded", function(){
+	document.querySelector('select[name="quantity"]').onchange=changeEventHandler;},false);
+
+	function changeEventHandler(event) {
+		if(!event.target.value)
+			document.addEventListener("DOMContentLoaded", function(){
+				document.querySelector('select[id="document.quantity"]').onchange=changeEventHandler;},false);
+				function changeEventHandler(event) {
+					if (!event.target.value)
+					return event.target.value = localStorage.getItem ("quantity");
+					console.log ("quantity: " + valueOf(event.target.value));}
+*/				
+let quantityInput (
+	const button = document.getElementById("addToCart")
+	button.addEventListener("click", (event) => {});
+})
+var input = document.getElementById("quantity");
+localStorage.setItem ("document.quantity", input.value(event.target.value));
+console.log ("quantity: " + valueOf(InputEvent.target.value))
+var storedValue = localStorage.getItem ("document.quantity");
+
+/*
+				addToCartButton.addEventListener('click', () => {
+					addItem(getAttribute('id'),
+						getAttribute('price'),
+						getAttribute('title'),
+						showItems()
+						);
+					}
+				);
+			})}
+*/)})}
+
+
+
+
+
+
+/*
+	var productSelectedData 
+							= document.getElementById('quantity','colors').value;
+		productSelectedData = parseInt(100) + parseInt(productSelectedData)
+		panier.push({
+			quantitySelected    :"http://localhost/front/html/product.html?_id=107fb5b75607497b96722bda5b504926".getElementById('quantity').value,
+			colorsSelected      :document.getElementById('colors').value,
+			imageSelected       :document.getElementById('image').value,
+			idSelected          :document.getElementById('_id').value,
+			descriptionSelected :document.getElementById('description').value,
+			nameSelected        :document.getElementById('title').value,
+			altTxtSelected 		:document.getElementById('altTxt').value,
+});
+localStorage.setItem('localData', JSON.stringify(panier));
+console.table(productSelectedData);
+console.table(addData());
+
+}
+function getData(){
+	var str = localStorage.getItem('localData');
+	if  (str != null)
+		arr = JSON.parse(str);
+}
+
+function deleteData(){localStorage.clear()};
+
+var i;
+
+console.log("local storage");
+for (i = 0; i < localStorage.length; i++)   {
+    console.log(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
+}
+
+console.log("session storage");
+for (i = 0; i < sessionStorage.length; i++) {
+    console.log(sessionStorage.key(i) + "=[" + sessionStorage.getItem(sessionStorage.key(i)) + "]");
+}}}
+function getData();
+function addData();
+*/
