@@ -9,6 +9,7 @@ let productSelected = function () {
 		.then((response) => response.json())
 		.then((data) => {
 			console.table(data);
+			products.push(data);
 			// get data image
 			let img        		  = document.querySelector(".item__img");
 			img.innerHTML   	  = `<img src="${data.imageUrl}" alt="${data.altTxt}">`;
@@ -35,4 +36,7 @@ let productSelected = function () {
 		});
 };
 productSelected();
+//get the response.json data and store it in localStorage with the key 'productSelected'
 
+let itemSelected = JSON.parse(localStorage.getItem('productSelected'));
+console.log(itemSelected);
