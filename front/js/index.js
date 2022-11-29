@@ -1,12 +1,5 @@
 
 
-
-
-
-
-
-
-
 fetch  ("http://localhost:3000/api/products")
 .then(response => response.json())
 .then((ProductsTable) => {
@@ -14,9 +7,9 @@ fetch  ("http://localhost:3000/api/products")
     allItems(ProductsTable);
 })
 
-.catch((error ) => {
+.catch((error) => {
 document.querySelector(".titles").innerHTML = "<h3> erreur 404 failed to get data from API check console log</h3>";
-console.log("erreur 404 Vérifier le statut du serveur/ adresse /  fonction fetch / api data"+err);
+console.log("erreur 404 Vérifier le statut du serveur/ adresse /  fonction fetch / api data"+error);
 });
 
 
