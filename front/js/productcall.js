@@ -28,3 +28,31 @@ function productCalling() {
     };
     productSelected();
 }
+productCalling();
+
+
+let button = document.getElementById("addToCart");
+button.addEventListener("click", addToCart);
+function addToCart() {
+    const parsedUrl = new URL(window.location.href);
+    let id = (parsedUrl.searchParams.get("_id"));
+    let cart = JSON.parse(localStorage.getItem("cart"));
+    if (cart === null) {
+        cart = [];
+    }
+    let cartItem = {
+        id: id,
+        quantity: document.getElementById("quantity").value,
+        color: document.getElementById("colors").value,
+    };
+    cart.push(cartItem);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    console.log(cart);
+    alert("L'article a bien été ajouté au panier");
+}
+
+    
+    console.log(localStorage.getItem("cart"));
+
+
+
