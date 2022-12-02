@@ -1,5 +1,3 @@
-
-
 fetch  ("http://localhost:3000/api/products")
 .then(response => response.json())
 .then((ProductsTable) => {
@@ -21,7 +19,7 @@ function allItems(index) {// https://chartio.com/learn/databases/how-does-indexi
         
         
         displayZone.innerHTML +=
-        `
+                `
             <a href="./product.html?_id=${article._id}">
                 <article>
                     <img src="${article.imageUrl}" alt="${article.altTxt}">

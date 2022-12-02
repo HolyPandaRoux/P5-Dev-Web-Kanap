@@ -1,4 +1,83 @@
 
+var fullCart = [];
+var selectedId = [];
+var selectedQuantity = [];
+var selectedColor = [];
+
+for  (let i 	 = 0; i < panier.length; i++) {
+	var selectedId       = panier[i].id;
+	var selectedQuantity = panier[i].quantity;
+	var selectedColor 	 = panier[i].color;
+		fullCart.push({
+				selectedId			 : id,
+				selectedQuantity : quantity,
+				selectedColor		 : color,
+		});
+		
+		console.table(fullCart);
+for (let i = 0; i < allProducts.length; i++) {
+	let name = title;
+	var description				  = allProducts[i].description;
+	var SelectedName 				= allProducts[i].title;
+	var price 							= allProducts[i].price;
+	var imageUrl 						= allProducts[i].imageUrl;
+	var altTxt 							= allProducts[i].altTxt;
+		fullCart.push({
+			description : description,
+			SelectedName     		: title,
+			price    		: price,
+			imageUrl 		: imageUrl,
+			altTxt   		: altTxt,
+	});
+console.log(arr?.fullCart);
+	}
+	}
+
+
+
+
+
+
+
+		/*
+function productTable(panier) {
+		let displayZone = document.querySelector("#cart__items");
+		for (let _id of panier) { 
+			displayZone.innerHTML +=
+			
+			`
+		<article class="cart__item" data-id="${id}" data-color="{product-color}">
+		<div class="cart__item__img">
+			<img src="${article.imageUrl}" alt="${article.altTxt}">
+		</div>
+		<div class="cart__item__content">
+			<div class="cart__item__content__description">
+				<h2>${article.name}</h2>
+				<p>${artcile.color}</p>
+				<p>${article.price}€</p>
+			</div>
+			<div class="cart__item__content__settings">
+				<div class="cart__item__content__settings__quantity">
+					<p>Qté :${quantity} </p>
+					<input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+				</div>
+				<div class="cart__item__content__settings__delete">
+					<p class="deleteItem">Supprimer</p>
+				</div>
+			</div>
+		</div>
+	</article>
+		
+		`
+}}*/
+
+
+
+
+
+
+
+
 
 const parsedUrl = new URL(window.location.href);
 let id = (parsedUrl.searchParams.get("_id"));
