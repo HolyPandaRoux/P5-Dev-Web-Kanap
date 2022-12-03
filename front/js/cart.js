@@ -48,12 +48,12 @@ let panier = getPanier();
 						title: 				product.name,
 						price: 				product.price,
 						color: 				panier[i].color,
-						quantity: 		panier[i].quantity,
-						description : product.description,
-						imageUrl : 		product.imageUrl,
+						quantity: 			panier[i].quantity,
+						description : 		product.description,
+						imageUrl : 			product.imageUrl,
 						altTxt : 			product.altTxt,
 						price: 				product.price,
-						totalPrice:   totalPrice,
+						totalPrice:   		totalPrice,
 					});
 					console.table(fullCart);
 				}
