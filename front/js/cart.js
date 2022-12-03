@@ -1,8 +1,22 @@
-function getPanier() { 
-    //getting the data from the local storage it will come as a string so we need to parse it 
-return localStorage.getItem('cart');
+function getPanier() {
 
-}
+// A CORRIGER ne marche pas
+//const emptyCart = document.querySelector("#cart__items");
+
+//if (localStorage('cart') === null || localStorage('cart') == 0) {
+//	const emptyCart = `<p>Votre panier est vide</p>`;
+//	emptyCart.innerHTML = emptyCart;
+//}
+//else  { 
+    //getting the data from the local storage it will come as a string so we need to parse it 
+//return localStorage.getItem('cart');
+
+
+
+	if (produitLocalStorage === null || produitLocalStorage == 0) {
+			const emptyCart = `<p>Votre panier est vide</p>`;
+			positionEmptyCart.innerHTML = emptyCart;
+	} else 
 let panier = getPanier();
     panier = JSON.parse(panier);
 //			console.log(getPanier());
@@ -31,7 +45,7 @@ let panier = getPanier();
 				for (let i = 0; i < panier.length; i++) {
 					fullCart.push({
 						_id:   				product._id,
-						name: 				product.name,
+						title: 				product.name,
 						price: 				product.price,
 						color: 				panier[i].color,
 						quantity: 		panier[i].quantity,
@@ -46,23 +60,23 @@ let panier = getPanier();
 	})}
 	
 
-
-
-/*
+function displayCart () {
+		document.getElementById("cart__items").innerHTML +=
 	
-	`<article class="cart__item" data-id="{${article._id}}" data-color="{product-color}">
+	`
+		<article class="cart__item" data-id="${fullcart._id}}" data-color="{product-color}">
 	<div class="cart__item__img">
-		<img src="${article.imageUrl}" alt="${article.altTxt}">
+		<img src="${fullCart.imageUrl}" alt="${fullCart.altTxt}">
 	</div>
-	<div class="cart__item__content">
-		<div class="cart__item__content__description">
-			<h2>${article.name}</h2>
-			<p>${article.color}</p>
-			<p>${price}€</p>
+	<div class="article__content">
+		<div class="article__content__description">
+			<h2>${fullCart.title}</h2>
+			<p>${fullCart.color}</p>
+			<p>${fullCart.price}€</p>
 		</div>
-		<div class="cart__item__content__settings">
-			<div class="cart__item__content__settings__quantity">
-				<p>Qté :${article.quantity} </p>
+		<div class="article__content__settings">
+			<div class="article__content__settings__quantity">
+				<p>Qté :${fullCart.quantity} </p>
 				<input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
 			</div>
 			<div class="cart__item__content__settings__delete">
@@ -70,5 +84,26 @@ let panier = getPanier();
 			</div>
 		</div>
 	</div>
-</article>`
-*/
+</article>
+<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+                <div class="cart__item__img">
+                  <img src="../images/product01.jpg" alt="Photographie d'un canapé">
+                </div>
+                <div class="cart__item__content">
+                  <div class="cart__item__content__description">
+                    <h2>Nom du produit</h2>
+                    <p>Vert</p>
+                    <p>42,00 €</p>
+                  </div>
+                  <div class="cart__item__content__settings">
+                    <div class="cart__item__content__settings__quantity">
+                      <p>Qté : </p>
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+                    </div>
+                    <div class="cart__item__content__settings__delete">
+                      <p class="deleteItem">Supprimer</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+` }}
