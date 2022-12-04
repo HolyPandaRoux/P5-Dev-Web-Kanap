@@ -16,8 +16,9 @@ function getPanier() {
 	if (produitLocalStorage === null || produitLocalStorage == 0) {
 			const emptyCart = `<p>Votre panier est vide</p>`;
 			positionEmptyCart.innerHTML = emptyCart;
-	} else 
-let panier = getPanier();
+	} else {
+	
+	let panier = getPanier();
     panier = JSON.parse(panier);
 //			console.log(getPanier());
     // parsing the response from JSON
@@ -106,4 +107,4 @@ function displayCart () {
                   </div>
                 </div>
               </article>
-` }}
+` }}}
