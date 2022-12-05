@@ -1,47 +1,16 @@
 function getPanier() {
-
-// A CORRIGER ne marche pas
-//const emptyCart = document.querySelector("#cart__items");
-
-//if (localStorage('cart') === null || localStorage('cart') == 0) {
-//	const emptyCart = `<p>Votre panier est vide</p>`;
-//	emptyCart.innerHTML = emptyCart;
-//}
-//else  { 
-    //getting the data from the local storage it will come as a string so we need to parse it 
-//return localStorage.getItem('cart');
-
-
-
-	if (produitLocalStorage === null || produitLocalStorage == 0) {
-			const emptyCart = `<p>Votre panier est vide</p>`;
-			positionEmptyCart.innerHTML = emptyCart;
-	} else {
-	
+	var panier = localStorage.getItem('panier');
 	let panier = getPanier();
-    panier = JSON.parse(panier);
-//			console.log(getPanier());
-    // parsing the response from JSON
-    
-    // getting all the items in the cart and displaying them in the console as a table
-
-    // iterating through the cart to get the id of each product selected by the customer    
-		// loop to concatenate the data from the local storage to the data from the api, completing the cart data with the data from the api. We are now dealing with one variable containing all the data per product in the cart (id, color, quantity, name, price, image, description)
+	console.log(panier);
+    panier = JSON.parse(panier);	
     for (let i = 0; i < panier.length; i++) {
-    // if you want to get all the id present in panier displayed in the console use this => console.log(panier[i].id);
         let id = panier[i].id;
-//					console.log(id);
 				const panierId = panier;
-//					console.log (panierId);
 				fetch (`http://localhost:3000/api/products/${id}`)
 							.then(response => response.json())
 							.then((data) => {
 									const product = data;
-//											console.table(product);
 				localStorage.setItem("product", JSON.stringify(product));
-//							console.log(localStorage.getItem("product"));
-//https://stackoverflow.com/questions/67660112/javascript-how-to-concat-objects-into-arrays-in-localstorage
-//https://bobbyhadz.com/blog/javascript-referenceerror-cannot-access-before-initialization#:~:text=The%20%22Cannot%20access%20before%20initialization,the%20variable%20before%20accessing%20it.
 				var fullCart = [];
 				for (let i = 0; i < panier.length; i++) {
 					fullCart.push({
@@ -58,9 +27,9 @@ function getPanier() {
 					});
 					console.table(fullCart);
 				}
-	})}
-	
+	})}}
 
+/*
 function displayCart () {
 		document.getElementById("cart__items").innerHTML +=
 	
@@ -107,4 +76,4 @@ function displayCart () {
                   </div>
                 </div>
               </article>
-` }}}
+` }}*/
