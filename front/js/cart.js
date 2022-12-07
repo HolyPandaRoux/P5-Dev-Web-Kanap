@@ -1,15 +1,16 @@
+let allProducts = [];
+
+
 function getPanier() {
     return localStorage.getItem('cart');
 }
-//getting the data from the local storage it will come as a string so we need to parse it 
+
 
 let panier = getPanier();
 panier = JSON.parse(panier);
-// parsing the response from JSON
 console.table(panier);
-// getting all the items in the cart and displaying them in the console as a table
 
-let allProducts = [];
+
 
 async function getAllProducts() {
     for (let i = 0; i < panier.length; i++) {
@@ -20,10 +21,24 @@ async function getAllProducts() {
 }
 getAllProducts();
 
+
 function getProductById(id) {
     return fetch(`http://localhost:3000/api/products/${id}`)
         .then(response => response.json());
 }
+getProductById();
+
+async function getProductsId() {
+    for (let i = 0; i < index.length; i++) {
+        console.log(index[i]);
+    }
+    
+getProductsId();
+
+
+
+
+
 
 
 
