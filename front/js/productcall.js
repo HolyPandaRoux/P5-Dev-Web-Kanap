@@ -1,3 +1,7 @@
+/**
+ * It takes the id of the product from the url, then it fetches the product from the database, then it
+ * displays the product's information on the page.
+ */
 function productCalling() {
     const parsedUrl = new URL(window.location.href);
     let id = (parsedUrl.searchParams.get("_id"));
@@ -35,15 +39,15 @@ let button = document.getElementById("addToCart");
 button.addEventListener("click", addToCart);
 function addToCart() {
     const parsedUrl = new URL(window.location.href);
-    let id = (parsedUrl.searchParams.get("_id"));
+    let id   = (parsedUrl.searchParams.get("_id"));
     let cart = JSON.parse(localStorage.getItem("cart"));
     if (cart === null) {
         cart = [];
     }
     let cartItem = {
-        id: id,
+        id      : id,
         quantity: document.getElementById("quantity").value,
-        color: document.getElementById("colors").value,
+        color   : document.getElementById("colors").value,
     };
     cart.push(cartItem);
     localStorage.setItem("cart", JSON.stringify(cart));
