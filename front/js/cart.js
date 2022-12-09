@@ -1,4 +1,9 @@
-// Calculcate total price and item quantity
+/**
+ * We get the products from the localStorage, for each product we fetch the product data from the api
+ * and then display it in the innerHTML of the cart
+ * @returns the value of the variable totalPrice.
+ */
+// Calculate total price and item quantity
 function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
     let totalQuantity = 0;
@@ -14,12 +19,12 @@ function totalPriceQuantityCalculation() {
             .then((res) => res.json())
             .then(product => {
                 // total item quantity
-                totalQuantity += cartProduct.quantity;
+                totalQuantity = cartProduct.quantity + totalQuantity;
                 // total price
                 totalPrice = totalPrice + product.price * cartProduct.quantity;
 
             })
-        document.querySelector("#totalPrice").textContent = totalPrice;
+        document.querySelector("#totalPrice")   .textContent = totalPrice;
         document.querySelector("#totalQuantity").textContent = totalQuantity;
     })
 }
@@ -32,7 +37,7 @@ function updatedProduct() {
             return;
         }
 
-        const id = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+        const id            = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
         const colorSelected = event.target.parentElement.parentElement.parentElement.parentElement.dataset.color;
         console.log(id)
         console.log(colorSelected);
@@ -57,7 +62,7 @@ function removeItemFromCart() {
         if (!(event.target.classList.contains('deleteItem'))) {
             return;
         }
-        const id = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+        const id            = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
         const colorSelected = event.target.parentElement.parentElement.parentElement.parentElement.dataset.color;
         console.log(id);
         console.log(colorSelected);
