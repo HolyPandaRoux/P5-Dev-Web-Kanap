@@ -1,19 +1,23 @@
+
+
 /**
- * We get the products from the localStorage, for each product we fetch the product data from the api
- * and then display it in the innerHTML of the cart
- * @returns the value of the variable totalPrice.
+ * It calculates the total price and quantity of the products in the cart
+ * @returns The total price and quantity of the products in the cart.
  */
-// Calculate total price and item quantity
 function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
     let totalQuantity = 0;
     let totalPrice = 0;
+
+    /* It checks if the cart is empty or not. If it is empty, it displays the total price and quantity
+    of the products in the cart. */
     if (!productsPanier || productsPanier.length == 0) {
-        document.querySelector("#totalPrice").textContent = totalPrice;
+        document.querySelector("#totalPrice")   .textContent = totalPrice;
         document.querySelector("#totalQuantity").textContent = totalQuantity;
         return null;
     }
 
+    /* Calculating the total price and quantity of the products in the cart. */
     productsPanier.forEach(async (cartProduct) => {
         await fetch("http://localhost:3000/api/products/" + cartProduct.id)
             .then((res) => res.json())
@@ -21,7 +25,7 @@ function totalPriceQuantityCalculation() {
                 // total item quantity
                 totalQuantity = cartProduct.quantity + totalQuantity;
                 // total price
-                totalPrice = totalPrice + product.price * cartProduct.quantity;
+                totalPrice    = totalPrice + product.price * cartProduct.quantity;
 
             })
         document.querySelector("#totalPrice")   .textContent = totalPrice;
@@ -30,72 +34,91 @@ function totalPriceQuantityCalculation() {
 }
 totalPriceQuantityCalculation();
 
-// update if any modifications are done by the customer
+/**
+ * It updates the quantity of a product in the cart
+ */
 function updatedProduct() {
+    /* Listening to the change event on the input element with the class itemQuantity. */
     document.addEventListener('change', (event) => {
         if (!(event.target.classList.contains('itemQuantity'))) {
             return;
         }
 
-        const id            = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+        /* It gets the id and the color of the product that the user wants to update or delete. */
+        const id = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
         const colorSelected = event.target.parentElement.parentElement.parentElement.parentElement.dataset.color;
         console.log(id)
         console.log(colorSelected);
 
+        /* It gets the cart products from local storage. */
         let productsPanier = JSON.parse(localStorage.getItem("cart"));
         console.log(productsPanier);
 
+        /* Updating the quantity of a product in the cart. */
         const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
         console.log('productsFoundIndex:', productsFoundIndex);
         productsPanier[productsFoundIndex].quantity = Number(event.target.value);
         console.log(productsPanier);
-        updateCartProducts(productsPanier);
+        cartUpdated(productsPanier);
         totalPriceQuantityCalculation();
     })
 }
 updatedProduct();
 
-// remove product from cart
+/**
+ * It removes an item from the cart when the user clicks on the delete button
+ */
 function removeItemFromCart() {
+    /* It listens to the click event on the delete button. */
     document.addEventListener('click', (event) => {
         console.log('event :', event);
         if (!(event.target.classList.contains('deleteItem'))) {
             return;
         }
-        const id            = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+        /* It gets the id and the color of the product that the user wants to update or delete. */
+        const id = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
         const colorSelected = event.target.parentElement.parentElement.parentElement.parentElement.dataset.color;
         console.log(id);
         console.log(colorSelected);
 
+        /* It gets the cart products from local storage. */
         let productsPanier = JSON.parse(localStorage.getItem("cart"));
         console.log(productsPanier);
 
+        /* It removes the product from the cart. */
         const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
         console.log('productsFoundIndex:', productsFoundIndex);
         productsPanier.splice(productsFoundIndex, 1);
-        updateCartProducts(productsPanier);
+        cartUpdated(productsPanier);
         displayCartContent();
         totalPriceQuantityCalculation();
     })
 }
 removeItemFromCart();
 
-// clear cart
+/**
+ * It returns the cart products from local storage
+ * @returns the value of the localStorage item "cart"
+ */
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
-// update cart
-function updateCartProducts(productList) {
+
+/**
+ * When the cart is updated, save the new cart to local storage.
+ * @param productList - The updated product list.
+ */
+function cartUpdated(productList) {
     localStorage.setItem("cart", JSON.stringify(productList));
 }
 
-
-
-
-// get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
+/**
+ * It fetches the products from the API, then displays them in the cart
+ */
 function displayCartContent() {
     let productsPanier = getCartProducts();
     document.querySelector("#cart__items").innerHTML = '';
+    /* Fetching the products from the API, then displays them in the cart. */
     productsPanier.forEach(async (cartProduct) => {
         await fetch("http://localhost:3000/api/products/" + cartProduct.id)
             .then((res) => res.json())

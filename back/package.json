@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@jsdoc/cli": "^0.2.8",
     "express": "^4.16.4",
     "node.js": "^0.0.1-security",
     "uuid": "^3.4.0"
