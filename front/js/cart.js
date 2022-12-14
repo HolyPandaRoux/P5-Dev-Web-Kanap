@@ -33,7 +33,8 @@ function displayCartContent() {
     })
 }
 displayCartContent();
-//************************************************************************************************************************************************* */
+
+
 // Calculcate total price and item quantity
 function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
@@ -61,7 +62,7 @@ function totalPriceQuantityCalculation() {
     })
 }
 totalPriceQuantityCalculation();
-//************************************************************************************************************************************************ */
+
 
 // update if any modifications are done by the customer
 function updatedProduct() {
@@ -87,7 +88,8 @@ function updatedProduct() {
     })
 }
 updatedProduct();
-//************************************************************************************************************************************************
+
+
 // remove product from cart
 function removeItemFromCart() {
     document.addEventListener('click', (event) => {
@@ -112,34 +114,27 @@ function removeItemFromCart() {
     })
 }
 removeItemFromCart();
-//************************************************************************************************************************************************
+
+
 // clear cart
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
+
+
 // update cart
 function updateCartProducts(productList) {
     localStorage.setItem("cart", JSON.stringify(productList));
 }
-//************************************************************************************************************************************************
 
-//************************************************************************************************************************************************
-class Form {
-    constructor() {
-        this.firstName = document.getElementById("first_name").value;
-        this.lastName  = document.getElementById("last_name") .value;
-        this.address   = document.getElementById("address")   .value;
-        this.city      = document.getElementById("city")      .value;
-        this.email     = document.getElementById("email")     .value;
-    }
-}
 
-//************************************************************************************************************************************************
-function input_validation() {
-    const FORM_VALUE = new Form();
+
+
+function inputValidation() {
+form = document.getElementById("cart__order__form");
 
     function firstNameInputValidation() {
-        const first_name_form  = FORM_VALUE.firstName;
+        const first_name_form  = form.firstName;
         const first_name_error = document.getElementById("first_name_error");
         if (/^[A-Za-z]{2,38}$/.test(first_name_form)) {
             first_name_error.innerText = "";
@@ -150,7 +145,7 @@ function input_validation() {
     }
 
     function lastNameInputValidation() {
-        const last_name_form  = FORM_VALUE.lastName;
+        const last_name_form  = form.lastName;
         const last_name_error = document.getElementById("last_name_error");
         if (/^[A-Za-z]{2,38}$/.test(last_name_form)) {
             last_name_error.innerText = "";
@@ -161,7 +156,7 @@ function input_validation() {
     }
 
     function addressInputValidation() {
-        const address_form  = FORM_VALUE.address;
+        const address_form  = form.address;
         const address_error = document.getElementById("address_error");
         if (/^[0-9]{1,5}\s+[A-Za-zéèàïêç\-\s]{2,50}$/.test(address_form)) {
             address_error.innerText = "";
@@ -171,7 +166,7 @@ function input_validation() {
         }
     }
     function cityInputValidation() {
-        const city_form  = FORM_VALUE.city;
+        const city_form  = form.city;
         const city_error = document.getElementById("city_error");
         if (/^[A-Za-z]{2,38}$/.test(city_form)) {
             city_error.innerText = "";
@@ -181,7 +176,7 @@ function input_validation() {
         }
     }
     function emailInputValidation() {
-        const email_form  = FORM_VALUE.email;
+        const email_form  = form.email;
         const email_error = document.getElementById("email_error");
         if (/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email_form)) {
             email_error.innerText = "";
@@ -190,49 +185,6 @@ function input_validation() {
             email_error.innerText ="Votre adresse email n'est pas valide, merci de modifier votre saisie pour continuer";
         }
     }
-
-
-if (firstNameInputValidation() && lastNameInputValidation() && addressInputValidation() && cityInputValidation() && emailInputValidation()) {
-    return true;
-} else {
-    console.log("user form is not valid");
 }
-contact = {
-    firstName: firstName.value,
-    lastName: lastName.value,
-    address: address.value,
-    city: city.value,
-    email: email.value,
-  };
 
-  //Déclaration d'une variable contenant les informations de la commande.
-  let order = {
-    contact,
-    products,
-  };
-  console.log(order);
 
-  //Requete post api.
-  fetch("http://localhost:3000/api/products/order", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(order),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-    })
-    .then(function (value) {
-      let orderLink = document.createElement("a");
-      orderLink.href = "confirmation.html?id=" + value.orderId;
-      console.log(orderLink);
-      //Redirection vers la page confirmation + orderId.
-      window.location.href = orderLink;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-}
