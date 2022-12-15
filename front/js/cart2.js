@@ -186,6 +186,9 @@ form.addEventListener("submit", (e) => {
 
     console.log(cartData);
     console.log(obj);
+
+    const Order = [cartData, obj];
+    console.log(Order);
 })
 
 document.addEventListener('#order', (event) => {
