@@ -1,0 +1,1 @@
+// get the id of the command and display the command number on confirlmlation screen
