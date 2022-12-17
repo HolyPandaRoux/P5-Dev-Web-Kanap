@@ -1,3 +1,6 @@
+function      getCartProducts() {
+    return JSON.parse(localStorage.getItem("cart"));
+}       
 // get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
 function displayCartContent() {
     let productsPanier = getCartProducts();
@@ -33,8 +36,7 @@ function displayCartContent() {
     })
 }
 displayCartContent();
-//************************************************************************************************************************************************* */
-// Calculcate total price and item quantity
+
 async function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
     let totalQuantity = 0;
@@ -60,11 +62,9 @@ async function totalPriceQuantityCalculation() {
         document.querySelector("#totalQuantity").textContent = totalQuantity;
     })
 }
+
 totalPriceQuantityCalculation();
-
-
-// update if any modifications are done by the customer
-function updatedProduct() {
+function       updatedProduct() {
     document.addEventListener('change', (event) => {
         if (!(event.target.classList.contains('itemQuantity'))) {
             return;
@@ -87,9 +87,8 @@ function updatedProduct() {
     })
 }
 updatedProduct();
-//************************************************************************************************************************************************
-// remove product from cart
-function removeItemFromCart() {
+
+function       removeItemFromCart() {
     document.addEventListener('click', (event) => {
         console.log('event :', event);
         if (!(event.target.classList.contains('deleteItem'))) {
@@ -112,86 +111,230 @@ function removeItemFromCart() {
     })
 }
 removeItemFromCart();
-//************************************************************************************************************************************************
-// clear cart
-function getCartProducts() {
-    return JSON.parse(localStorage.getItem("cart"));
-}
-// update cart
-function updateCartProducts(productList) {
-    localStorage.setItem("cart", JSON.stringify(productList));
-}
 
 
-function firstNameInputValidation() {
-    const first_name_form = form.firstName;
-    const first_name_error = document.getElementById("first_name_error");
-    if (/^[A-Za-z]{2,38}$/.test(first_name_form)) {
-        first_name_error.innerText = "";
-        return true;
+const formFirstName = document.getElementById('firstName');
+const formLastName  = document.getElementById('lastName');
+const formEmail     = document.getElementById('email');
+const formAddress   = document.getElementById('address');
+const formCity      = document.getElementById('city');
+const form          = document.getElementById('order');
+
+const checkFirstName    = () => {
+
+    let valid = false;
+    
+    const min = 2,
+        max = 25;
+    
+        const firstName = formFirstName.value.trim();
+    
+        if (!isRequired(firstName)) {
+        showError(formFirstName, 'First name cannot be blank.');
+    } else if (!isBetween(firstName.length, min, max)) {
+        showError(formFirstName, `First name must be between ${min} and ${max} characters.`)
+    } else {
+        showSuccess(formFirstName);
+        valid = true;
     }
-}
-
-function lastNameInputValidation() {
-    const last_name_form = form.lastName;
-    const last_name_error = document.getElementById("last_name_error");
-    if (/^[A-Za-z]{2,38}$/.test(last_name_form)) {
-        last_name_error.innerText = "";
-        return true;
+    return valid;
+};
+const checkLastName     = () => {
+    let valid = false;
+    const min = 2,
+        max = 25;
+    const lastName = formLastName.value.trim();
+    if (!isRequired(lastName)) {
+        showError(formLastName, 'Last name cannot be blank.');
+    } else if (!isBetween(lastName.length, min, max)) {
+        showError(formLastName, `Last name must be between ${min} and ${max} characters.`)
+    } else {
+        showSuccess(formLastName);
+        valid = true;
     }
-}
-
-function addressInputValidation() {
-    const address_form = form.address;
-    const address_error = document.getElementById("address_error");
-    if (/^[0-9]{1,5}\s+[A-Za-zéèàïêç\-\s]{2,50}$/.test(address_form)) {
-        address_error.innerText = "";
-        return true;
+    return valid;
+};
+const checkEmail        = () => {
+    let valid = false;
+    const email = formEmail.value.trim();
+    if (!isRequired(email)) {
+        showError(formEmail, 'Email cannot be blank.');
+    } else if (!isEmailValid(email)) {
+        showError(formEmail, 'Email is not valid.')
+    } else {
+        showSuccess(formEmail);
+        valid = true;
     }
-}
-
-function cityInputValidation() {
-    const city_form = form.city;
-    const city_error = document.getElementById("city_error");
-    if (/^[A-Za-z]{2,38}$/.test(city_form)) {
-        city_error.innerText = "";
-        return true;
+    return valid;   
+};
+const checkAddress      = () => {
+    let valid = false;
+    const min = 5,
+        max = 50;
+    const address = formAddress.value.trim();
+    if (!isRequired(address)) {
+        showError(formAddress, 'Address cannot be blank.');
+    } else if (!isBetween(address.length, min, max)) {
+        showError(formAddress, `Address must be between ${min} and ${max} characters.`)
+    } else {
+        showSuccess(formAddress);
+        valid = true;
     }
-}
-
-function emailInputValidation() {
-    const email_form = form.email;
-    const email_error = document.getElementById("email_error");
-    if (/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email_form)) {
-        email_error.innerText = "";
-        return true;
+    return valid;
+};
+const checkCity         = () => {
+    let valid = false;
+    const min = 2,
+        max = 25;
+    const city = formCity.value.trim();
+    if (!isRequired(city)) {
+        showError(formCity, 'City cannot be blank.');
+    } else if (!isBetween(city.length, min, max)) {
+        showError(formCity, `City must be between ${min} and ${max} characters.`)
+    } else {
+        showSuccess(formCity);
+        valid = true;
     }
+    return valid;
+};
+const isEmailValid      = (email)     => {
+    const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const patternMatches = regEx.test(email);
+};
+const isFirstNameValid  = (firstName) => {
+    const regEx = /^[a-zA-Z]+$/;
+    const patternMatches = regEx.test(firstName);
+};
+const isLastNameValid   = (lastName)  => {
+    const regEx = /^[a-zA-Z]+$/;
+    const patternMatches = regEx.test(lastName);
+};
+const isAddressValid    = (address)   => {
+    const regEx = /^[a-zA-Z0-9\s,'-]*$/;
+    const patternMatches = regEx.test(address);
+};
+const isCityValid       = (city)      => {
+    const regEx = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
+    const patternMatches = regEx.test(city);
+};
+
+const isRequired = value => value === '' ? false : true;
+const isBetween  = (length, min, max) => length < min || length > max ? false : true;
+
+
+const showError   = (input, message) => {
+    // get the form-field element
+    const formField = input.parentElement;
+    // add the error class
+    formField.classList.remove('success');
+    formField.classList.add('error');
+
+    // show the error message
+    const error = formField.querySelector('small');
+    error.textContent = message;
+};
+const showSuccess = (input) => {
+    // get the form-field element
+    const formField = input.parentElement;
+
+    // remove the error class
+    formField.classList.remove('error');
+    formField.classList.add('success');
+
+    // hide the error message
+    const error = formField.querySelector('small');
+    error.textContent = '';
 }
-
-
-const form = document.querySelector("form");
-
-form.addEventListener("submit", (e) => {
+form.addEventListener('order', function (e) {
+    // prevent the form from submitting
     e.preventDefault();
-    new FormData(form);
-
-    const fd = new FormData(form);
-    const obj = Object.fromEntries(fd);
-
-    const json = JSON.stringify(obj);
-    localStorage.setItem('form', json);
-
-    const cartData = JSON.parse(localStorage.getItem('cart'));
 
 
-    console.log(cartData);
-    console.log(obj);
+    let isFirstNameValid = checkFirstName(),
+        isLastNameValid  = checkLastName (),
+        isEmailValid     = checkEmail    (),
+        isAddressValid   = checkAddress  (),
+        isCityValid      = checkCity     ();
 
-    const Order = [cartData, obj];
-    console.log(Order);
-})
-
-document.addEventListener('#order', (event) => {
-    event.preventDefault();
-    sendData();
+    let isFormValid =   isFirstNameValid && 
+                        isLastNameValid  && 
+                        isEmailValid     && 
+                        isAddressValid   && 
+                        isCityValid;
+    if (isFormValid) {
+        console.log('form is valid');
+    }
 });
+const debounce = (fn, delay = 500) => {
+        let timeoutId;
+        return (...args) => {
+            // cancel the previous timer
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            // setup a new timer
+            timeoutId = setTimeout(() => {
+                fn.apply(null, args)
+            }, delay);
+        };
+};
+form.addEventListener('input', debounce(function (e) {
+        switch (e.target.id) {
+            case 'firstName':
+                checkFirstName();
+                break;
+            case 'lastName':
+                checkLastName();
+                break;
+            case 'email':
+                checkEmail();
+                break;
+            case 'address':
+                checkAddress();
+                break;
+            case 'city':
+                checkCity();
+                break;
+        }
+}));
+
+// generate an async function to send the data from the server and from the cart to the server using POST method and fetch
+async function send() {
+    let idList = generateProductIdList();
+
+    const toSend = {
+        "contact": { // envoie l'objet contact
+            "firstName": firstNameInput.value,
+            "lastName": lastNameInput.value,
+            "address": addressInput.value,
+            "city": cityInput.value,
+            "email": emailInput.value
+        },
+        "products": idList // envoie le tableau des produits
+    }
+    await fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(toSend)
+    })
+
+        .then(function (res) {
+            if (res.ok) {
+                return res.json()
+            }
+        })
+        .then(function (result) { // dirige vers la page de validation de commande, en injectant l'id de la commande dans l'url
+            document.location.href = `confirmation.html?orderId=${result.orderId}`
+        })
+}
+
+// fonction qui récupère les ids uniques des produits dans le localstorage "cart", pour les réunir dans le tableau qui sera envoyé lors de la commande
+function generateProductIdList() {
+    const myCart = JSON.parse(localStorage.getItem("cart"))
+    const idList = myCart.map((product) => product.id) // récupère les ids
+    const noDuplicate = [...new Set(idList)] // créé un tableau des ids en supprimant les doublons
+    return noDuplicate
+}
