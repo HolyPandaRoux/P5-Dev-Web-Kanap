@@ -1,7 +1,14 @@
+/**
+ * It returns the value of the "cart" key in localStorage, parsed as JSON.
+ * @returns the value of the localStorage item "cart" which is a string.
+ */
 function      getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }       
 // get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
+/**
+ * It displays the content of the cart.
+ */
 function displayCartContent() {
     let productsPanier = getCartProducts();
     document.querySelector("#cart__items").innerHTML = '';
@@ -37,6 +44,8 @@ function displayCartContent() {
 }
 displayCartContent();
 
+/* Fetching the product from the database and then calculating the total price and quantity of the
+product. */
 async function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
     let totalQuantity = 0;
@@ -46,12 +55,14 @@ async function totalPriceQuantityCalculation() {
         document.querySelector("#totalQuantity").textContent = totalQuantity;
     }
 
+    /* Fetching the product from the database and then calculating the total price and quantity of the
+    product. */
     productsPanier.forEach(async (cartProduct) => {
         await fetch("http://localhost:3000/api/products/" + cartProduct.id)
             .then((res) => res.json())
             .then(product => 
                 {
-                    console.log('total quanity',totalQuantity)
+                    console.log('total quantity',totalQuantity)
                     console.log('Cart product quantity ',cartProduct.quantity)                // total item quantity
                 totalQuantity += Number(cartProduct.quantity);
                 // total price
@@ -86,9 +97,8 @@ function       updatedProduct() {
         totalPriceQuantityCalculation();
     })
 }
-updatedProduct();
 
-function       removeItemFromCart() {
+function removeItemFromCart() {
     document.addEventListener('click', (event) => {
         console.log('event :', event);
         if (!(event.target.classList.contains('deleteItem'))) {
@@ -110,7 +120,7 @@ function       removeItemFromCart() {
         totalPriceQuantityCalculation();
     })
 }
-removeItemFromCart();
+
 
 
 const formFirstName = document.getElementById('firstName');
@@ -120,6 +130,11 @@ const formAddress   = document.getElementById('address');
 const formCity      = document.getElementById('city');
 const form          = document.getElementById('order');
 
+/**
+ * If the value of the input is not blank, and the length of the value is between the min and max, then
+ * show success, otherwise show error.
+ * @returns The return value is a boolean.
+ */
 const checkFirstName    = () => {
 
     let valid = false;
@@ -197,31 +212,42 @@ const checkCity         = () => {
     }
     return valid;
 };
+/**
+ * If the input matches the regular expression, return true, otherwise return false.
+ * @param email - [a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*
+ */
 const isEmailValid      = (email)     => {
     const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const patternMatches = regEx.test(email);
+    return re.test(email);
 };
 const isFirstNameValid  = (firstName) => {
     const regEx = /^[a-zA-Z]+$/;
-    const patternMatches = regEx.test(firstName);
+    return re.test(firstName);
 };
 const isLastNameValid   = (lastName)  => {
     const regEx = /^[a-zA-Z]+$/;
-    const patternMatches = regEx.test(lastName);
+    return re.test(lastName);
 };
 const isAddressValid    = (address)   => {
     const regEx = /^[a-zA-Z0-9\s,'-]*$/;
-    const patternMatches = regEx.test(address);
+    return re.test(address);
 };
 const isCityValid       = (city)      => {
     const regEx = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
-    const patternMatches = regEx.test(city);
+    return re.test(city);
 };
 
 const isRequired = value => value === '' ? false : true;
 const isBetween  = (length, min, max) => length < min || length > max ? false : true;
 
 
+/**
+ * When the form is submitted, prevent the form from submitting, check the validity of each input, and
+ * if all inputs are valid, submit the form.
+ * @param input - the input element that is being validated
+ * @param message - The message to display to the user.
+ */
+const showAlert = ()
 const showError   = (input, message) => {
     // get the form-field element
     const formField = input.parentElement;
@@ -238,23 +264,23 @@ const showSuccess = (input) => {
     const formField = input.parentElement;
 
     // remove the error class
-    formField.classList.remove('error');
     formField.classList.add('success');
 
-    // hide the error message
-    const error = formField.querySelector('small');
-    error.textContent = '';
 }
-form.addEventListener('order', function (e) {
-    // prevent the form from submitting
+let btnOrder = document.getElementById("order");
+btnOrder.addEventListener('click', function (e) {
+    console.log("Form Submitted");
     e.preventDefault();
 
 
+   /* Checking the validity of the form. */
     let isFirstNameValid = checkFirstName(),
         isLastNameValid  = checkLastName (),
         isEmailValid     = checkEmail    (),
         isAddressValid   = checkAddress  (),
         isCityValid      = checkCity     ();
+/* The above code is checking to see if all the variables are true. If they are all true, then the form
+is valid. */
 
     let isFormValid =   isFirstNameValid && 
                         isLastNameValid  && 
@@ -262,9 +288,16 @@ form.addEventListener('order', function (e) {
                         isAddressValid   && 
                         isCityValid;
     if (isFormValid) {
-        console.log('form is valid');
+    Send();
     }
 });
+/**
+ * It returns a function that will call the original function after a delay, but if the function is
+ * called again before the delay, it will cancel the previous call and start the delay over again.
+ * @param fn - The function to be debounced.
+ * @param [delay=500] - The time in milliseconds to wait before calling the function.
+ * @returns A function that takes in a function and a delay.
+ */
 const debounce = (fn, delay = 500) => {
         let timeoutId;
         return (...args) => {
@@ -278,6 +311,12 @@ const debounce = (fn, delay = 500) => {
             }, delay);
         };
 };
+/* Adding an event listener to the form. The event listener is listening for an input event. When the
+input event is triggered, the debounce function is called. The debounce function is passed an
+anonymous function. The anonymous function is passed the event object. The anonymous function has a
+switch statement. The switch statement is checking the id of the event target. If the id is
+firstName, the checkFirstName function is called. If the id is lastName, the checkLastName function
+is called. If the id is email, the checkEmail function is called. etc.... */
 form.addEventListener('input', debounce(function (e) {
         switch (e.target.id) {
             case 'firstName':
@@ -296,45 +335,70 @@ form.addEventListener('input', debounce(function (e) {
                 checkCity();
                 break;
         }
+        document.localStorage.setItem(JSON.stringify(form));
 }));
+console.log(JSON.parse(localStorage.getItem('form')));
+console.log(JSON.parse(localStorage.getItem('cart')));
+console.log(JSON.parse(localStorage.getItem('cartPrice')));
+console.log(JSON.parse(localStorage.getItem('cartQuantity')));
 
-// generate an async function to send the data from the server and from the cart to the server using POST method and fetch
-async function send() {
-    let idList = generateProductIdList();
+const readyToSendForm         = JSON.parse(localStorage.getItem('form'));
+const readyTosendCart         = JSON.parse(localStorage.getItem('cart'));
+const readyToSendCartPrice    = JSON.parse(localStorage.getItem('cartPrice'));
+const readyToSendCartQuantity = JSON.parse(localStorage.getItem('cartQuantity'));
 
-    const toSend = {
-        "contact": { // envoie l'objet contact
-            "firstName": firstNameInput.value,
-            "lastName": lastNameInput.value,
-            "address": addressInput.value,
-            "city": cityInput.value,
-            "email": emailInput.value
-        },
-        "products": idList // envoie le tableau des produits
+async function Send() {
+    let productsId = generateProductsId();
+
+    const readyToSend= {
+        contact : {
+        "fistName"  : readyToSendForm.firstName.value,
+        "lastName"  : readyToSendForm.lastName.value,
+        "email"     : readyToSendForm.email.value,
+        "address"   : readyToSendForm.address.value,
+        "city"      : readyToSendForm.city.value,
+    },
+    "products": productsId
     }
-    await fetch("http://localhost:3000/api/products/order", {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(toSend)
-    })
+    let cart      = localStorage.getItem('cart');
+    let cartPrice = localStorage.getItem('cartPrice');
+    let order     = {
+            firstName : formFirstName.value,
+            lastName  : formLastName.value,
+            email     : formEmail.value,
+            address   : formAddress.value,
+            city      : formCity.value,
+            cart      : cart,
+            cartPrice : cartPrice,
+            products  : productsId,
+        };
 
-        .then(function (res) {
-            if (res.ok) {
-                return res.json()
-            }
+        await fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(order),
+            
         })
-        .then(function (result) { // dirige vers la page de validation de commande, en injectant l'id de la commande dans l'url
-            document.location.href = `confirmation.html?orderId=${result.orderId}`
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Order submitted!');
+            localStorage.clear();
+            location.reload();
         })
+        .then(function (result) {
+            document.location.href = `confirmation.html?orderId=${result.orderId}`;
+        })
+        .catch((error) => {
+            console.error('Error when tried to send data to the server', error);
+        });
+}
+function generateProductsId() {
+    const customerCart = JSON.parse(localStorage.getItem('cart'))
+    const productsIdList = customerCart.map((product) => product._id);
+    const noDuplicate =  [...new Set(productsIdList)];
+    return noDuplicate;
 }
 
-// fonction qui récupère les ids uniques des produits dans le localstorage "cart", pour les réunir dans le tableau qui sera envoyé lors de la commande
-function generateProductIdList() {
-    const myCart = JSON.parse(localStorage.getItem("cart"))
-    const idList = myCart.map((product) => product.id) // récupère les ids
-    const noDuplicate = [...new Set(idList)] // créé un tableau des ids en supprimant les doublons
-    return noDuplicate
-}
