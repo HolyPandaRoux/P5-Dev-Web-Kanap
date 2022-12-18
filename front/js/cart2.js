@@ -135,18 +135,12 @@ const form          = document.getElementById('order');
  * show success, otherwise show error.
  * @returns The return value is a boolean.
  */
-const checkFirstName    = () => {
-
+const checkFirstName    = () => {   
     let valid = false;
-    
     const min = 2,
         max = 25;
-    
-        const firstName = formFirstName.value.trim();
-    
-        if (!isRequired(firstName)) {
-        showError(formFirstName, 'First name cannot be blank.');
-    } else if (!isBetween(firstName.length, min, max)) {
+    const firstName = formFirstName.value.trim();
+    if (!isBetween(firstName.length, min, max)) {
         showError(formFirstName, `First name must be between ${min} and ${max} characters.`)
     } else {
         showSuccess(formFirstName);
@@ -159,9 +153,7 @@ const checkLastName     = () => {
     const min = 2,
         max = 25;
     const lastName = formLastName.value.trim();
-    if (!isRequired(lastName)) {
-        showError(formLastName, 'Last name cannot be blank.');
-    } else if (!isBetween(lastName.length, min, max)) {
+    if (!isBetween(lastName.length, min, max)) {
         showError(formLastName, `Last name must be between ${min} and ${max} characters.`)
     } else {
         showSuccess(formLastName);
@@ -172,9 +164,7 @@ const checkLastName     = () => {
 const checkEmail        = () => {
     let valid = false;
     const email = formEmail.value.trim();
-    if (!isRequired(email)) {
-        showError(formEmail, 'Email cannot be blank.');
-    } else if (!isEmailValid(email)) {
+    if (!isEmailValid(email)) {
         showError(formEmail, 'Email is not valid.')
     } else {
         showSuccess(formEmail);
@@ -187,9 +177,7 @@ const checkAddress      = () => {
     const min = 5,
         max = 50;
     const address = formAddress.value.trim();
-    if (!isRequired(address)) {
-        showError(formAddress, 'Address cannot be blank.');
-    } else if (!isBetween(address.length, min, max)) {
+    if (!isBetween(address.length, min, max)) {
         showError(formAddress, `Address must be between ${min} and ${max} characters.`)
     } else {
         showSuccess(formAddress);
@@ -202,9 +190,7 @@ const checkCity         = () => {
     const min = 2,
         max = 25;
     const city = formCity.value.trim();
-    if (!isRequired(city)) {
-        showError(formCity, 'City cannot be blank.');
-    } else if (!isBetween(city.length, min, max)) {
+    if (!isBetween(city.length, min, max)) {
         showError(formCity, `City must be between ${min} and ${max} characters.`)
     } else {
         showSuccess(formCity);
@@ -247,26 +233,10 @@ const isBetween  = (length, min, max) => length < min || length > max ? false : 
  * @param input - the input element that is being validated
  * @param message - The message to display to the user.
  */
-const showAlert = ()
-const showError   = (input, message) => {
-    // get the form-field element
-    const formField = input.parentElement;
-    // add the error class
-    formField.classList.remove('success');
-    formField.classList.add('error');
 
-    // show the error message
-    const error = formField.querySelector('small');
-    error.textContent = message;
-};
-const showSuccess = (input) => {
-    // get the form-field element
-    const formField = input.parentElement;
 
-    // remove the error class
-    formField.classList.add('success');
 
-}
+
 let btnOrder = document.getElementById("order");
 btnOrder.addEventListener('click', function (e) {
     console.log("Form Submitted");
