@@ -2,8 +2,13 @@
  * It returns the value of the "cart" key in localStorage, parsed as JSON.
  * @returns the value of the localStorage item "cart" which is a string.
  */
+
+const cartStatus = JSON.parse(localStorage.getItem("cart"));
 function      getCartProducts() {
-    return JSON.parse(localStorage.getItem("cart"));
+    if (cartStatus == null) {
+        alert("Votre panier est vide");
+    }
+    else return JSON.parse(localStorage.getItem("cart"));
 }       
 // get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
 /**
@@ -216,7 +221,6 @@ const isCityValid       = (city)      => {
     return re.test(city);
 };
 
-const isRequired = value => value === '' ? false : true;
 const isBetween  = (length, min, max) => length < min || length > max ? false : true;
 
 
