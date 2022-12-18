@@ -62,8 +62,6 @@ async function totalPriceQuantityCalculation() {
             .then((res) => res.json())
             .then(product => 
                 {
-                    console.log('total quantity',totalQuantity)
-                    console.log('Cart product quantity ',cartProduct.quantity)                // total item quantity
                 totalQuantity += Number(cartProduct.quantity);
                 // total price
                 totalPrice = Number(totalPrice) + Number(product.price) * Number(cartProduct.quantity);
@@ -131,7 +129,7 @@ const formCity      = document.getElementById('city');
 const form          = document.getElementById('order');
 
 /**
- * If the value of the input is not blank, and the length of the value is between the min and max, then
+ * the emptiness of the input forms is already checked by the html code using required only the length of the value is between the min and max, then
  * show success, otherwise show error.
  * @returns The return value is a boolean.
  */
@@ -141,9 +139,8 @@ const checkFirstName    = () => {
         max = 25;
     const firstName = formFirstName.value.trim();
     if (!isBetween(firstName.length, min, max)) {
-        showError(formFirstName, `First name must be between ${min} and ${max} characters.`)
+        alert(formFirstName, `First name must be between ${min} and ${max} characters.`)
     } else {
-        showSuccess(formFirstName);
         valid = true;
     }
     return valid;
@@ -154,9 +151,8 @@ const checkLastName     = () => {
         max = 25;
     const lastName = formLastName.value.trim();
     if (!isBetween(lastName.length, min, max)) {
-        showError(formLastName, `Last name must be between ${min} and ${max} characters.`)
+        alert(formLastName, `Last name must be between ${min} and ${max} characters.`)
     } else {
-        showSuccess(formLastName);
         valid = true;
     }
     return valid;
@@ -165,9 +161,8 @@ const checkEmail        = () => {
     let valid = false;
     const email = formEmail.value.trim();
     if (!isEmailValid(email)) {
-        showError(formEmail, 'Email is not valid.')
+        alert(formEmail, 'Email is not valid.')
     } else {
-        showSuccess(formEmail);
         valid = true;
     }
     return valid;   
@@ -178,9 +173,8 @@ const checkAddress      = () => {
         max = 50;
     const address = formAddress.value.trim();
     if (!isBetween(address.length, min, max)) {
-        showError(formAddress, `Address must be between ${min} and ${max} characters.`)
+        alert(formAddress, `Address must be between ${min} and ${max} characters.`)
     } else {
-        showSuccess(formAddress);
         valid = true;
     }
     return valid;
@@ -191,9 +185,8 @@ const checkCity         = () => {
         max = 25;
     const city = formCity.value.trim();
     if (!isBetween(city.length, min, max)) {
-        showError(formCity, `City must be between ${min} and ${max} characters.`)
+        alert(formCity, `City must be between ${min} and ${max} characters.`)
     } else {
-        showSuccess(formCity);
         valid = true;
     }
     return valid;
@@ -203,23 +196,23 @@ const checkCity         = () => {
  * @param email - [a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*
  */
 const isEmailValid      = (email)     => {
-    const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return re.test(email);
 };
 const isFirstNameValid  = (firstName) => {
-    const regEx = /^[a-zA-Z]+$/;
+    const re = /^[a-zA-Z]+$/;
     return re.test(firstName);
 };
 const isLastNameValid   = (lastName)  => {
-    const regEx = /^[a-zA-Z]+$/;
+    const re = /^[a-zA-Z]+$/;
     return re.test(lastName);
 };
 const isAddressValid    = (address)   => {
-    const regEx = /^[a-zA-Z0-9\s,'-]*$/;
+    const re = /^[a-zA-Z0-9\s,'-]*$/;
     return re.test(address);
 };
 const isCityValid       = (city)      => {
-    const regEx = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
+    const re = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
     return re.test(city);
 };
 
@@ -287,7 +280,7 @@ anonymous function. The anonymous function is passed the event object. The anony
 switch statement. The switch statement is checking the id of the event target. If the id is
 firstName, the checkFirstName function is called. If the id is lastName, the checkLastName function
 is called. If the id is email, the checkEmail function is called. etc.... */
-form.addEventListener('input', debounce(function (e) {
+form.addEventListener('change', debounce(function (e) {
         switch (e.target.id) {
             case 'firstName':
                 checkFirstName();
@@ -309,8 +302,6 @@ form.addEventListener('input', debounce(function (e) {
 }));
 console.log(JSON.parse(localStorage.getItem('form')));
 console.log(JSON.parse(localStorage.getItem('cart')));
-console.log(JSON.parse(localStorage.getItem('cartPrice')));
-console.log(JSON.parse(localStorage.getItem('cartQuantity')));
 
 const readyToSendForm         = JSON.parse(localStorage.getItem('form'));
 const readyTosendCart         = JSON.parse(localStorage.getItem('cart'));
