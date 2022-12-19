@@ -5,10 +5,7 @@
 
 const cartStatus = JSON.parse(localStorage.getItem("cart"));
 function      getCartProducts() {
-    if (cartStatus == null) {
-        alert("Votre panier est vide");
-    }
-    else return JSON.parse(localStorage.getItem("cart"));
+    return JSON.parse(localStorage.getItem("cart"));
 }       
 // get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
 /**
@@ -138,6 +135,8 @@ const form          = document.getElementById('order');
  * show success, otherwise show error.
  * @returns The return value is a boolean.
  */
+
+
 const checkFirstName    = () => {   
     let valid = false;
     const min = 2,
@@ -196,10 +195,8 @@ const checkCity         = () => {
     }
     return valid;
 };
-/**
- * If the input matches the regular expression, return true, otherwise return false.
- * @param email - [a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*
- */
+
+
 const isEmailValid      = (email)     => {
     const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return re.test(email);
@@ -222,16 +219,6 @@ const isCityValid       = (city)      => {
 };
 
 const isBetween  = (length, min, max) => length < min || length > max ? false : true;
-
-
-/**
- * When the form is submitted, prevent the form from submitting, check the validity of each input, and
- * if all inputs are valid, submit the form.
- * @param input - the input element that is being validated
- * @param message - The message to display to the user.
- */
-
-
 
 
 let btnOrder = document.getElementById("order");
@@ -265,26 +252,12 @@ is valid. */
  * @param [delay=500] - The time in milliseconds to wait before calling the function.
  * @returns A function that takes in a function and a delay.
  */
-const debounce = (fn, delay = 500) => {
-        let timeoutId;
-        return (...args) => {
-            // cancel the previous timer
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-            // setup a new timer
-            timeoutId = setTimeout(() => {
-                fn.apply(null, args)
-            }, delay);
-        };
-};
+
 /* Adding an event listener to the form. The event listener is listening for an input event. When the
-input event is triggered, the debounce function is called. The debounce function is passed an
-anonymous function. The anonymous function is passed the event object. The anonymous function has a
-switch statement. The switch statement is checking the id of the event target. If the id is
+input event is triggered,The switch statement is checking the id of the event target. If the id is
 firstName, the checkFirstName function is called. If the id is lastName, the checkLastName function
 is called. If the id is email, the checkEmail function is called. etc.... */
-form.addEventListener('change', debounce(function (e) {
+form.addEventListener('change' ,function (e) {
         switch (e.target.id) {
             case 'firstName':
                 checkFirstName();
@@ -303,56 +276,36 @@ form.addEventListener('change', debounce(function (e) {
                 break;
         }
         document.localStorage.setItem(JSON.stringify(form));
-}));
-console.log(JSON.parse(localStorage.getItem('form')));
-console.log(JSON.parse(localStorage.getItem('cart')));
+});
 
-const readyToSendForm         = JSON.parse(localStorage.getItem('form'));
-const readyTosendCart         = JSON.parse(localStorage.getItem('cart'));
-const readyToSendCartPrice    = JSON.parse(localStorage.getItem('cartPrice'));
-const readyToSendCartQuantity = JSON.parse(localStorage.getItem('cartQuantity'));
+function generateProductsId() {
+    const customerCart   = JSON.parse(localStorage.getItem('cart'))
+    const productsIdList = customerCart.map((product) => product._id);
+    const noDuplicate    =  [...new Set(productsIdList)];
+    return noDuplicate;
+}
 
 async function Send() {
     let productsId = generateProductsId();
-
-    const readyToSend= {
-        contact : {
-        "fistName"  : readyToSendForm.firstName.value,
-        "lastName"  : readyToSendForm.lastName.value,
-        "email"     : readyToSendForm.email.value,
-        "address"   : readyToSendForm.address.value,
-        "city"      : readyToSendForm.city.value,
-    },
-    "products": productsId
-    }
-    let cart      = localStorage.getItem('cart');
-    let cartPrice = localStorage.getItem('cartPrice');
-    let order     = {
+    console.log(productsId)
+    let contact    = {
             firstName : formFirstName.value,
             lastName  : formLastName.value,
             email     : formEmail.value,
             address   : formAddress.value,
             city      : formCity.value,
-            cart      : cart,
-            cartPrice : cartPrice,
-            products  : productsId,
         };
-
+    console.log(contact);
+        console.log(order);
         await fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(order),
+            body: JSON.stringify(contact), 
             
         })
         .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert('Order submitted!');
-            localStorage.clear();
-            location.reload();
-        })
         .then(function (result) {
             document.location.href = `confirmation.html?orderId=${result.orderId}`;
         })
@@ -360,10 +313,5 @@ async function Send() {
             console.error('Error when tried to send data to the server', error);
         });
 }
-function generateProductsId() {
-    const customerCart = JSON.parse(localStorage.getItem('cart'))
-    const productsIdList = customerCart.map((product) => product._id);
-    const noDuplicate =  [...new Set(productsIdList)];
-    return noDuplicate;
-}
+
 
