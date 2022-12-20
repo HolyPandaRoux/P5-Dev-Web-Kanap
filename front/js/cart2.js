@@ -287,7 +287,7 @@ function generateProductsId() {
     return noDuplicate;
 }
 
-async function Send() {
+async function send() {
     let productsId = generateProductsId();
     console.log(productsId)
     let contact    = {
@@ -308,6 +308,7 @@ async function Send() {
         })
             .then(function (res) {
                 if (res.ok) {
+                    body.send(readyToSend);
                     return res.json(),
                         alert('Your order has been sent to the server')
                 }
@@ -319,7 +320,7 @@ async function Send() {
                 console.error('Error when tried to send data to the server', error);
                     alert('Error when tried to send data to the server')
             });
-      
+
 }
 
 
