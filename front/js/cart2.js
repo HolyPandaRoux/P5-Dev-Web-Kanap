@@ -1,3 +1,5 @@
+"strict"
+
 /**
  * It returns the value of the "cart" key in localStorage, parsed as JSON.
  * @returns the value of the localStorage item "cart" which is a string.
@@ -302,16 +304,22 @@ async function Send() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(contact), 
-            
+            body: JSON.stringify(readyToSend),
         })
-        .then(response => response.json())
-        .then(function (result) {
-            document.location.href = `confirmation.html?orderId=${result.orderId}`;
-        })
-        .catch((error) => {
-            console.error('Error when tried to send data to the server', error);
-        });
+            .then(function (res) {
+                if (res.ok) {
+                    return res.json(),
+                        alert('Your order has been sent to the server')
+                }
+            })
+            .then(function (res) {
+                window.location.href = `confirmation.html?orderId=${res.orderId}`;
+            })
+            .catch((error) => {
+                console.error('Error when tried to send data to the server', error);
+                    alert('Error when tried to send data to the server')
+            });
+      
 }
 
 
