@@ -1,18 +1,9 @@
-"strict"
-
-/**
- * It returns the value of the "cart" key in localStorage, parsed as JSON.
- * @returns the value of the localStorage item "cart" which is a string.
- */
 
 const cartStatus = JSON.parse(localStorage.getItem("cart"));
-function      getCartProducts() {
+function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
-}       
-// get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
-/**
- * It displays the content of the cart.
- */
+}
+
 function displayCartContent() {
     let productsPanier = getCartProducts();
     document.querySelector("#cart__items").innerHTML = '';
@@ -48,14 +39,13 @@ function displayCartContent() {
 }
 displayCartContent();
 
-/* Fetching the product from the database and then calculating the total price and quantity of the
-product. */
+
 async function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
     let totalQuantity = 0;
     let totalPrice = 0;
     if (!productsPanier || productsPanier.length == 0) {
-        document.querySelector("#totalPrice")   .textContent = totalPrice;
+        document.querySelector("#totalPrice").textContent = totalPrice;
         document.querySelector("#totalQuantity").textContent = totalQuantity;
     }
 
@@ -64,8 +54,7 @@ async function totalPriceQuantityCalculation() {
     productsPanier.forEach(async (cartProduct) => {
         await fetch("http://localhost:3000/api/products/" + cartProduct.id)
             .then((res) => res.json())
-            .then(product => 
-                {
+            .then(product => {
                 totalQuantity += Number(cartProduct.quantity);
                 // total price
                 totalPrice = Number(totalPrice) + Number(product.price) * Number(cartProduct.quantity);
@@ -75,9 +64,11 @@ async function totalPriceQuantityCalculation() {
         document.querySelector("#totalQuantity").textContent = totalQuantity;
     })
 }
-
 totalPriceQuantityCalculation();
-function       updatedProduct() {
+
+
+
+function updatedProduct() {
     document.addEventListener('change', (event) => {
         if (!(event.target.classList.contains('itemQuantity'))) {
             return;
@@ -124,7 +115,6 @@ function removeItemFromCart() {
 }
 
 
-
 const formFirstName = document.getElementById('firstName');
 const formLastName  = document.getElementById('lastName');
 const formEmail     = document.getElementById('email');
@@ -132,14 +122,8 @@ const formAddress   = document.getElementById('address');
 const formCity      = document.getElementById('city');
 const form          = document.getElementById('order');
 
-/**
- * the emptiness of the input forms is already checked by the html code using required only the length of the value is between the min and max, then
- * show success, otherwise show error.
- * @returns The return value is a boolean.
- */
 
-
-const checkFirstName    = () => {   
+const checkFirstName = () => {
     let valid = false;
     const min = 2,
         max = 25;
@@ -151,7 +135,7 @@ const checkFirstName    = () => {
     }
     return valid;
 };
-const checkLastName     = () => {
+const checkLastName  = () => {
     let valid = false;
     const min = 2,
         max = 25;
@@ -163,17 +147,17 @@ const checkLastName     = () => {
     }
     return valid;
 };
-const checkEmail        = () => {
+const checkEmail     = () => {
     let valid = false;
     const email = formEmail.value.trim();
-    if (!isEmailValid(email)) {
+    if (!contentEmailValidation(email)) {
         alert(formEmail, 'Email is not valid.')
     } else {
         valid = true;
     }
-    return valid;   
+    return valid;
 };
-const checkAddress      = () => {
+const checkAddress   = () => {
     let valid = false;
     const min = 5,
         max = 50;
@@ -185,7 +169,7 @@ const checkAddress      = () => {
     }
     return valid;
 };
-const checkCity         = () => {
+const checkCity      = () => {
     let valid = false;
     const min = 2,
         max = 25;
@@ -199,128 +183,117 @@ const checkCity         = () => {
 };
 
 
-const isEmailValid      = (email)     => {
+const contentEmailValidation     = (email) => {
     const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return re.test(email);
 };
-const isFirstNameValid  = (firstName) => {
+const contentFirstNameValidation = (firstName) => {
     const re = /^[a-zA-Z]+$/;
     return re.test(firstName);
 };
-const isLastNameValid   = (lastName)  => {
+const contentLastNameValidation  = (lastName) => {
     const re = /^[a-zA-Z]+$/;
     return re.test(lastName);
 };
-const isAddressValid    = (address)   => {
+const contentAdressValidation    = (address) => {
     const re = /^[a-zA-Z0-9\s,'-]*$/;
     return re.test(address);
 };
-const isCityValid       = (city)      => {
+const contentCityValidation      = (city) => {
     const re = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
     return re.test(city);
 };
 
-const isBetween  = (length, min, max) => length < min || length > max ? false : true;
+const isBetween = (length, min, max) => length < min || length > max ? false : true;
 
 
 let btnOrder = document.getElementById("order");
 btnOrder.addEventListener('click', function (e) {
-    console.log("Form Submitted");
     e.preventDefault();
 
 
-   /* Checking the validity of the form. */
-    let isFirstNameValid = checkFirstName(),
-        isLastNameValid  = checkLastName (),
-        isEmailValid     = checkEmail    (),
-        isAddressValid   = checkAddress  (),
-        isCityValid      = checkCity     ();
-/* The above code is checking to see if all the variables are true. If they are all true, then the form
-is valid. */
+    let contentFirstNameValidation = checkFirstName(),
+        contentLastNameValidation = checkLastName(),
+        contentEmailValidation = checkEmail(),
+        contentAdressValidation = checkAddress(),
+        contentCityValidation = checkCity();
 
-    let isFormValid =   isFirstNameValid && 
-                        isLastNameValid  && 
-                        isEmailValid     && 
-                        isAddressValid   && 
-                        isCityValid;
+    let isFormValid = contentFirstNameValidation &&
+        contentLastNameValidation &&
+        contentEmailValidation &&
+        contentAdressValidation &&
+        contentCityValidation;
     if (isFormValid) {
-    Send();
+        send();
     }
-});
-/**
- * It returns a function that will call the original function after a delay, but if the function is
- * called again before the delay, it will cancel the previous call and start the delay over again.
- * @param fn - The function to be debounced.
- * @param [delay=500] - The time in milliseconds to wait before calling the function.
- * @returns A function that takes in a function and a delay.
- */
+    else { 
+        alert('Merci de vérifier que vous avez correctement rempli tous les champs');
+    }
+    }
+);
 
-/* Adding an event listener to the form. The event listener is listening for an input event. When the
-input event is triggered,The switch statement is checking the id of the event target. If the id is
-firstName, the checkFirstName function is called. If the id is lastName, the checkLastName function
-is called. If the id is email, the checkEmail function is called. etc.... */
-form.addEventListener('change' ,function (e) {
-        switch (e.target.id) {
-            case 'firstName':
-                checkFirstName();
-                break;
-            case 'lastName':
-                checkLastName();
-                break;
-            case 'email':
-                checkEmail();
-                break;
-            case 'address':
-                checkAddress();
-                break;
-            case 'city':
-                checkCity();
-                break;
-        }
-        document.localStorage.setItem(JSON.stringify(form));
+form.addEventListener('change', function (e) {
+    switch (e.target.id) {
+        case 'firstName':
+            checkFirstName();
+            break;
+        case 'lastName':
+            checkLastName();
+            break;
+        case 'email':
+            checkEmail();
+            break;
+        case 'address':
+            checkAddress();
+            break;
+        case 'city':
+            checkCity();
+            break;
+    }
+    document.localStorage.setItem(JSON.stringify(form));
 });
 
-function generateProductsId() {
-    const customerCart   = JSON.parse(localStorage.getItem('cart'))
-    const productsIdList = customerCart.map((product) => product._id);
-    const noDuplicate    =  [...new Set(productsIdList)];
-    return noDuplicate;
+
+function generateProducts() {
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    let products = [];
+    for (let i = 0; i < cart.length; i++) {
+        products.push(cart[i].id);
+    }
+    return products;
 }
-
+function generateContact() {
+    const contact = {
+        firstName: formFirstName.value,
+        lastName: formLastName.value,
+        email: formEmail.value,
+        address: formAddress.value,
+        city: formCity.value,
+    };
+    return contact;
+}
 async function send() {
-    let productsId = generateProductsId();
-    console.log(productsId)
-    let contact    = {
-            firstName : formFirstName.value,
-            lastName  : formLastName.value,
-            email     : formEmail.value,
-            address   : formAddress.value,
-            city      : formCity.value,
-        };
+    let products = generateProducts();
+    let contact = generateContact();
+    let toSend = { contact, products };
     console.log(contact);
-        console.log(order);
-        await fetch('http://localhost:3000/api/products/order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(readyToSend),
-        })
-            .then(function (res) {
-                if (res.ok) {
-                    body.send(readyToSend);
-                    return res.json(),
-                        alert('Your order has been sent to the server')
-                }
-            })
-            .then(function (res) {
-                window.location.href = `confirmation.html?orderId=${res.orderId}`;
-            })
-            .catch((error) => {
-                console.error('Error when tried to send data to the server', error);
-                    alert('Error when tried to send data to the server')
-            });
+    console.log(products);
 
+    await fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(toSend)
+
+    })
+        .then(response => response.json())
+        .then(bodyResponse => {
+            window.location.href = `./confirmation.html?orderid=${bodyResponse.orderId}`;
+            console.log(bodyResponse)
+        })
+        .then(localStorage.clear())
+        .catch(error => alert(`error when data sent to server (${error.message}`));
 }
 
 
