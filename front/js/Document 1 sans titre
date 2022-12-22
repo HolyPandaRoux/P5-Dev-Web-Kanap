@@ -1,0 +1,41 @@
+function updatedProduct() {
+    document.addEventListener('change', (event) => {
+        if (!(event.target.classList.contains('itemQuantity'))) {
+            return;
+        }
+
+        const id = event.target.parentElement.dataset.id;
+        const colorSelected = event.target.parentElement.color;
+        console.log(id)
+        console.log(colorSelected);
+
+        let productsPanier = JSON.parse(localStorage.getItem("cart"));
+        console.log(productsPanier);
+
+        const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
+        console.log('productsFoundIndex:', productsFoundIndex);
+        productsPanier[productsFoundIndex].quantity = Number(event.target.value);
+        console.log(productsPanier);
+        updatedProduct(productsPanier);
+        totalPriceQuantityCalculation();
+    })
+}
+updatedProduct();
+
+function removeItemFromCart() {
+    document.addEventListener('click', (event) => {
+        if (!(event.target.classList.contains('deleteItem'))) {
+            return;
+        }
+        const id = event.target.parentElement.dataset.id;
+        const colorSelected = event.target.parentElement.dataset.color;
+        let productsPanier = JSON.parse(localStorage.getItem("cart"));
+        const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
+        console.log('productsFoundIndex:', productsFoundIndex);
+        productsPanier.splice(productsFoundIndex, 1);
+        updatedProduct(productsPanier);
+        displayCartContent();
+        totalPriceQuantityCalculation();
+    })
+}
+removeItemFromCart

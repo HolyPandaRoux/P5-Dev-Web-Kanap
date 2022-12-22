@@ -3,6 +3,66 @@ const cartStatus = JSON.parse(localStorage.getItem("cart"));
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
+function totalQuantity() {
+    let totalQuantity = document.getElementById('totalQuantity');
+    let quantitiesProduct = document.querySelectorAll('.itemQuantity');
+    let totalQuantities = 0;
+    quantitiesProduct.forEach(qte =>{
+    totalQuantities += Number(qte.value);
+    })
+    return totalQuantity.innerHTML = totalQuantities;
+}
+
+// fonction qui calcul le prix des produits par quantité et le prix total
+function totalPrice() {
+    let totalPrice = document.getElementById("totalPrice")
+    let priceItem = document.querySelectorAll(".priceItem")
+    total = 0;
+    priceItem.forEach(price => {
+        total += Number(price.textContent);
+        console.log(typeof price.textContent);
+    })
+    return totalPrice.innerHTML = total;
+}
+
+priceItem.innerHTML=inputQuantity.value * eltItem.price;
+        totalPrice()
+        totalQuantity()
+            
+        // changement des quantités avec la maj des tarifs, des quantités et du local storage
+        inputQuantity.addEventListener("change",(e)=>{
+            e.preventDefault();
+            priceItem.innerHTML=inputQuantity.value * eltItem.price;
+            totalQuantity();
+            totalPrice();
+            if (localStorage.getItem('product')) {
+                let objIndex = registerItem.findIndex((item=> item.id === eltItem.id && item.color === eltItem.color))
+                if (objIndex !== -1) {
+                    registerItem[objIndex].quantities = inputQuantity.value;
+                }
+            }
+            localStorage.setItem("product",JSON.stringify(registerItem));
+        })
+
+        // suppression des articles avec maj du local storage
+        deleteItem.addEventListener('click',(e) =>{
+            e.preventDefault();
+            if (eltItem.id === eltItem.id) {
+                let objIndex = registerItem.indexOf();
+                // demande de confirmation de la suppression de l'article
+                deleteConfirm = confirm("Voulez-vous vraiment supprimer l'article?")
+                if (deleteConfirm == true) {
+                    cartArticles.removeChild(article);
+                    registerItem.splice(objIndex, 1)
+                }
+            }
+            totalPrice();
+            totalQuantity();
+            localStorage.setItem('product',JSON.stringify(registerItem));
+        
+        });
+
+
 
 function displayCartContent() {
     let productsPanier = getCartProducts();
@@ -38,82 +98,6 @@ function displayCartContent() {
     })
 }
 displayCartContent();
-
-
-async function totalPriceQuantityCalculation() {
-    let productsPanier = getCartProducts();
-    let totalQuantity = 0;
-    let totalPrice = 0;
-    if (!productsPanier || productsPanier.length == 0) {
-        document.querySelector("#totalPrice").textContent = totalPrice;
-        document.querySelector("#totalQuantity").textContent = totalQuantity;
-    }
-
-    /* Fetching the product from the database and then calculating the total price and quantity of the
-    product. */
-    productsPanier.forEach(async (cartProduct) => {
-        await fetch("http://localhost:3000/api/products/" + cartProduct.id)
-            .then((res) => res.json())
-            .then(product => {
-                totalQuantity += Number(cartProduct.quantity);
-                // total price
-                totalPrice = Number(totalPrice) + Number(product.price) * Number(cartProduct.quantity);
-
-            })
-        document.querySelector("#totalPrice").textContent = totalPrice;
-        document.querySelector("#totalQuantity").textContent = totalQuantity;
-    })
-}
-totalPriceQuantityCalculation();
-
-
-
-function updatedProduct() {
-    document.addEventListener('change', (event) => {
-        if (!(event.target.classList.contains('itemQuantity'))) {
-            return;
-        }
-
-        const id = event.target.parentElement.dataset.id;
-        const colorSelected = event.target.parentElement.color;
-        console.log(id)
-        console.log(colorSelected);
-
-        let productsPanier = JSON.parse(localStorage.getItem("cart"));
-        console.log(productsPanier);
-
-        const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
-        console.log('productsFoundIndex:', productsFoundIndex);
-        productsPanier[productsFoundIndex].quantity = Number(event.target.value);
-        console.log(productsPanier);
-        updateCartProducts(productsPanier);
-        totalPriceQuantityCalculation();
-    })
-}
-
-function removeItemFromCart() {
-    document.addEventListener('click', (event) => {
-        console.log('event :', event);
-        if (!(event.target.classList.contains('deleteItem'))) {
-            return;
-        }
-        const id = event.target.parentElement.dataset.id;
-        const colorSelected = event.target.parentElement.dataset.color;
-        console.log(id);
-        console.log(colorSelected);
-
-        let productsPanier = JSON.parse(localStorage.getItem("cart"));
-        console.log(productsPanier);
-
-        const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
-        console.log('productsFoundIndex:', productsFoundIndex);
-        productsPanier.splice(productsFoundIndex, 1);
-        updateCartProducts(productsPanier);
-        displayCartContent();
-        totalPriceQuantityCalculation();
-    })
-}
-
 
 const formFirstName = document.getElementById('firstName');
 const formLastName  = document.getElementById('lastName');
