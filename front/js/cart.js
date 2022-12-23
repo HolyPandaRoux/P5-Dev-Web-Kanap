@@ -1,78 +1,24 @@
 
-const cartStatus = JSON.parse(localStorage.getItem("cart"));
+//get the cart data from the precedent page localStorage service
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
-function totalQuantity() {
-    let totalQuantity = document.getElementById('totalQuantity');
-    let quantitiesProduct = document.querySelectorAll('.itemQuantity');
-    let totalQuantities = 0;
-    quantitiesProduct.forEach(qte =>{
-    totalQuantities += Number(qte.value);
-    })
-    return totalQuantity.innerHTML = totalQuantities;
+// update the cart data in the localStorage service on the spot 
+function updateCartProducts(productList) {
+    localStorage.setItem("cart", JSON.stringify(productList));
 }
 
-// fonction qui calcul le prix des produits par quantité et le prix total
-function totalPrice() {
-    let totalPrice = document.getElementById("totalPrice")
-    let priceItem = document.querySelectorAll(".priceItem")
-    total = 0;
-    priceItem.forEach(price => {
-        total += Number(price.textContent);
-        console.log(typeof price.textContent);
-    })
-    return totalPrice.innerHTML = total;
-}
-
-priceItem.innerHTML=inputQuantity.value * eltItem.price;
-        totalPrice()
-        totalQuantity()
-            
-        // changement des quantités avec la maj des tarifs, des quantités et du local storage
-        inputQuantity.addEventListener("change",(e)=>{
-            e.preventDefault();
-            priceItem.innerHTML=inputQuantity.value * eltItem.price;
-            totalQuantity();
-            totalPrice();
-            if (localStorage.getItem('product')) {
-                let objIndex = registerItem.findIndex((item=> item.id === eltItem.id && item.color === eltItem.color))
-                if (objIndex !== -1) {
-                    registerItem[objIndex].quantities = inputQuantity.value;
-                }
-            }
-            localStorage.setItem("product",JSON.stringify(registerItem));
-        })
-
-        // suppression des articles avec maj du local storage
-        deleteItem.addEventListener('click',(e) =>{
-            e.preventDefault();
-            if (eltItem.id === eltItem.id) {
-                let objIndex = registerItem.indexOf();
-                // demande de confirmation de la suppression de l'article
-                deleteConfirm = confirm("Voulez-vous vraiment supprimer l'article?")
-                if (deleteConfirm == true) {
-                    cartArticles.removeChild(article);
-                    registerItem.splice(objIndex, 1)
-                }
-            }
-            totalPrice();
-            totalQuantity();
-            localStorage.setItem('product',JSON.stringify(registerItem));
-        
-        });
-
-
-
+// get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
 function displayCartContent() {
     let productsPanier = getCartProducts();
     document.querySelector("#cart__items").innerHTML = '';
     productsPanier.forEach(async (cartProduct) => {
+//get the missing data from the api using the product id ( more or less like on the index.js page)
         await fetch("http://localhost:3000/api/products/" + cartProduct.id)
             .then((res) => res.json())
             .then(product => {
                 document.querySelector("#cart__items").innerHTML +=
-
+//display for each product the data , depending of the location of the data cartProduct for localStorage data et product for api data
                     `<article class="cart__item" data-id="${product._id}"  data-color="${cartProduct.color}">
                 <div class="cart__item__img">
                         <img src="${product.imageUrl}" alt="${product.altTxt}">
@@ -98,6 +44,73 @@ function displayCartContent() {
     })
 }
 displayCartContent();
+
+// update if any modifications are done by the customer
+function updatedProduct() {
+    document.addEventListener('change', (event) => {
+        if (!(event.target.classList.contains('itemQuantity'))) {
+            return;
+        }
+
+        const id = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+        const colorSelected = event.target.parentElement.parentElement.parentElement.parentElement.dataset.color;
+        console.log(id)
+        console.log(colorSelected);
+
+        let productsPanier = JSON.parse(localStorage.getItem("cart"));
+        console.log(productsPanier);
+
+        const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
+        console.log('productsFoundIndex:', productsFoundIndex);
+        productsPanier[productsFoundIndex].quantity = Number(event.target.value);
+        console.log(productsPanier);
+        updateCartProducts(productsPanier);
+        totalPriceQuantityCalculation();
+    })
+}
+updatedProduct();
+
+// remove product from cart depending on the action from listener click on the delete button
+function removeItemFromCart() {
+    document.addEventListener('click', (event) => {
+        console.log('event :', event);
+        if (!(event.target.classList.contains('deleteItem'))) {
+            return;
+        }
+        const id = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+        const colorSelected = event.target.parentElement.parentElement.parentElement.parentElement.dataset.color;
+        console.log(id);
+        console.log(colorSelected);
+
+        let productsPanier = JSON.parse(localStorage.getItem("cart"));
+        console.log(productsPanier);
+
+        const productsFoundIndex = productsPanier.findIndex((product) => product.id === id && product.color === colorSelected);
+        console.log('productsFoundIndex:', productsFoundIndex);
+        productsPanier.splice(productsFoundIndex, 1);
+        updateCartProducts(productsPanier);
+        displayCartContent();
+        totalPriceQuantityCalculation();
+    })
+}
+removeItemFromCart();
+
+// add and update the cart quantity and price , depending on the listener event.target.value
+getCartProducts().forEach(async (cartProduct) => {
+    await fetch("http://localhost:3000/api/products/" + cartProduct.id)
+        .then((res) => res.json())
+        .then(product => {
+            // total item quantity
+            totalQuantity += cartProduct.quantity;
+            // total price
+            totalPrice = totalPrice + product.price * cartProduct.quantity;
+
+        })
+    document.querySelector("#totalPrice").textContent    = totalPrice;
+    document.querySelector("#totalQuantity").textContent = totalQuantity;
+})
+
+
 
 const formFirstName = document.getElementById('firstName');
 const formLastName  = document.getElementById('lastName');
