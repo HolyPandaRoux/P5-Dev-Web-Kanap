@@ -39,9 +39,9 @@ function displayCartContent() {
                         </div>
                     </div>
                 </div>
-            </article>`
-            })
-    })
+            </article>`;
+            });
+    });
 }
 displayCartContent();
 
@@ -66,7 +66,7 @@ function updatedProduct() {
         console.log(productsPanier);
         updateCartProducts(productsPanier);
         totalPriceQuantityCalculation();
-    })
+    });
 }
 updatedProduct();
 
@@ -91,24 +91,31 @@ function removeItemFromCart() {
         updateCartProducts(productsPanier);
         displayCartContent();
         totalPriceQuantityCalculation();
-    })
+    });
 }
 removeItemFromCart();
+// create a function named totalPriceQuantityCalculation to calculate the total price and total quantity of the cart, get the value of the quantity of each product and multiply it by the price of the product , then add the result to the total price and total quantity of the cart , then display the result in the innerHTML of the cart page, this function is called at the end of each function to update the total price and total quantity of the cart after any modification made by the customer
 
-// add and update the cart quantity and price , depending on the listener event.target.value
-getCartProducts().forEach(async (cartProduct) => {
-    await fetch("http://localhost:3000/api/products/" + cartProduct.id)
-        .then((res) => res.json())
-        .then(product => {
-            // total item quantity
-            totalQuantity += cartProduct.quantity;
-            // total price
-            totalPrice = totalPrice + product.price * cartProduct.quantity;
 
-        })
-    document.querySelector("#totalPrice").textContent    = totalPrice;
-    document.querySelector("#totalQuantity").textContent = totalQuantity;
-})
+function totalPriceQuantityCalculation() {
+    let productsPanier = getCartProducts();
+    let totalPrice = 0;
+    let totalQuantity = 0;
+    productsPanier.forEach(async (cartProduct) => {
+        await fetch("http://localhost:3000/api/products/" + cartProduct.id)
+
+            .then((res) => res.json())
+            .then(product => {
+                totalPrice += product.price * cartProduct.quantity;
+                totalQuantity += cartProduct.quantity;
+                document.querySelector("#totalPrice").innerHTML = +totalPrice + ",00 €";
+                document.querySelector("#totalQuantity").innerHTML = +totalQuantity;
+            });
+    });}
+
+totalPriceQuantityCalculation();
+
+
 
 
 
@@ -126,7 +133,7 @@ const checkFirstName = () => {
         max = 25;
     const firstName = formFirstName.value.trim();
     if (!isBetween(firstName.length, min, max)) {
-        alert(formFirstName, `First name must be between ${min} and ${max} characters.`)
+        console.log(formFirstName, `First name must be between ${min} and ${max} characters.`)
     } else {
         valid = true;
     }
@@ -138,7 +145,7 @@ const checkLastName  = () => {
         max = 25;
     const lastName = formLastName.value.trim();
     if (!isBetween(lastName.length, min, max)) {
-        alert(formLastName, `Last name must be between ${min} and ${max} characters.`)
+        console.log(formLastName, `Last name must be between ${min} and ${max} characters.`)
     } else {
         valid = true;
     }
@@ -148,7 +155,7 @@ const checkEmail     = () => {
     let valid = false;
     const email = formEmail.value.trim();
     if (!contentEmailValidation(email)) {
-        alert(formEmail, 'Email is not valid.')
+        console.log(formEmail, 'Email is not valid.')
     } else {
         valid = true;
     }
@@ -160,7 +167,7 @@ const checkAddress   = () => {
         max = 50;
     const address = formAddress.value.trim();
     if (!isBetween(address.length, min, max)) {
-        alert(formAddress, `Address must be between ${min} and ${max} characters.`)
+        showError('klkfjdslkfjdsmlqkfjdqslkmjfds')
     } else {
         valid = true;
     }
@@ -172,7 +179,7 @@ const checkCity      = () => {
         max = 25;
     const city = formCity.value.trim();
     if (!isBetween(city.length, min, max)) {
-        alert(formCity, `City must be between ${min} and ${max} characters.`)
+        console.log(formCity, `City must be between ${min} and ${max} characters.`)
     } else {
         valid = true;
     }
@@ -208,7 +215,7 @@ let btnOrder = document.getElementById("order");
 btnOrder.addEventListener('click', function (e) {
     e.preventDefault();
 
-
+    
     let contentFirstNameValidation = checkFirstName(),
         contentLastNameValidation = checkLastName(),
         contentEmailValidation = checkEmail(),
@@ -229,26 +236,6 @@ btnOrder.addEventListener('click', function (e) {
     }
 );
 
-form.addEventListener('change', function (e) {
-    switch (e.target.id) {
-        case 'firstName':
-            checkFirstName();
-            break;
-        case 'lastName':
-            checkLastName();
-            break;
-        case 'email':
-            checkEmail();
-            break;
-        case 'address':
-            checkAddress();
-            break;
-        case 'city':
-            checkCity();
-            break;
-    }
-    document.localStorage.setItem(JSON.stringify(form));
-});
 
 
 function generateProducts() {
@@ -290,7 +277,6 @@ async function send() {
             console.log(bodyResponse)
         })
         .then(localStorage.clear())
-        .catch(error => alert(`error when data sent to server (${error.message}`));
+        .catch(error => console.log(`error when data sent to server (${error.message}`));
 }
-
-
+    
