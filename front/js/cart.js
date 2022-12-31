@@ -1,24 +1,27 @@
 
-//get the cart data from the precedent page localStorage service
+/**
+ * returns the cart products from local storage.
+ * @returns An array of objects.
+ */
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
-// update the cart data in the localStorage service on the spot 
+/* Updating the cart products in local storage. */
 function updateCartProducts(productList) {
     localStorage.setItem("cart", JSON.stringify(productList));
 }
 
-// get cart products from local storage, for each product present in the localStorage cart we fetch the product data from the api and then display it in the innerHTML of the cart
+/* function that displays the content of the cart. */
 function displayCartContent() {
     let productsPanier = getCartProducts();
     document.querySelector("#cart__items").innerHTML = '';
     productsPanier.forEach(async (cartProduct) => {
-//get the missing data from the api using the product id ( more or less like on the index.js page)
+        //get the missing data from the api using the product id ( more or less like on the index.js page)
         await fetch("http://localhost:3000/api/products/" + cartProduct.id)
             .then((res) => res.json())
             .then(product => {
                 document.querySelector("#cart__items").innerHTML +=
-//display for each product the data , depending of the location of the data cartProduct for localStorage data et product for api data
+                    //display for each product the data , depending of the location of the data cartProduct for localStorage data et product for api data
                     `<article class="cart__item" data-id="${product._id}"  data-color="${cartProduct.color}">
                 <div class="cart__item__img">
                         <img src="${product.imageUrl}" alt="${product.altTxt}">
@@ -45,7 +48,7 @@ function displayCartContent() {
 }
 displayCartContent();
 
-// update if any modifications are done by the customer
+/* Updating the quantity of the product in the cart. */
 function updatedProduct() {
     document.addEventListener('change', (event) => {
         if (!(event.target.classList.contains('itemQuantity'))) {
@@ -70,7 +73,7 @@ function updatedProduct() {
 }
 updatedProduct();
 
-// remove product from cart depending on the action from listener click on the delete button
+/* Removing the item from the cart. */
 function removeItemFromCart() {
     document.addEventListener('click', (event) => {
         console.log('event :', event);
@@ -94,9 +97,10 @@ function removeItemFromCart() {
     });
 }
 removeItemFromCart();
-// create a function named totalPriceQuantityCalculation to calculate the total price and total quantity of the cart, get the value of the quantity of each product and multiply it by the price of the product , then add the result to the total price and total quantity of the cart , then display the result in the innerHTML of the cart page, this function is called at the end of each function to update the total price and total quantity of the cart after any modification made by the customer
 
 
+
+/* Calculating the total price and quantity of the products in the cart. */
 function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
     let totalPrice = 0;
@@ -111,11 +115,9 @@ function totalPriceQuantityCalculation() {
                 document.querySelector("#totalPrice").innerHTML = +totalPrice + ",00 €";
                 document.querySelector("#totalQuantity").innerHTML = +totalQuantity;
             });
-    });}
-
+    });
+}
 totalPriceQuantityCalculation();
-
-
 
 
 
@@ -125,15 +127,23 @@ const formEmail     = document.getElementById('email');
 const formAddress   = document.getElementById('address');
 const formCity      = document.getElementById('city');
 const form          = document.getElementById('order');
+const errors        = [];
 
 
+/**
+ * If the length of the input is not between the min and max, then push the input and the error message
+ * to the errors array.
+ * @returns The return value is the result of the last expression evaluated in the function.
+ */
 const checkFirstName = () => {
     let valid = false;
+    /* Declaring two constants. */
     const min = 2,
         max = 25;
     const firstName = formFirstName.value.trim();
+    /* Checking if the length of the input is between the min and max. */
     if (!isBetween(firstName.length, min, max)) {
-        console.log(formFirstName, `First name must be between ${min} and ${max} characters.`)
+        errors.push(formFirstName, `First name must be between ${min} and ${max} characters.`)
     } else {
         valid = true;
     }
@@ -145,7 +155,7 @@ const checkLastName  = () => {
         max = 25;
     const lastName = formLastName.value.trim();
     if (!isBetween(lastName.length, min, max)) {
-        console.log(formLastName, `Last name must be between ${min} and ${max} characters.`)
+        errors.push(formLastName, `Last name must be between ${min} and ${max} characters.`)
     } else {
         valid = true;
     }
@@ -155,7 +165,7 @@ const checkEmail     = () => {
     let valid = false;
     const email = formEmail.value.trim();
     if (!contentEmailValidation(email)) {
-        console.log(formEmail, 'Email is not valid.')
+        errors.push(formEmail, 'Email is not valid.')
     } else {
         valid = true;
     }
@@ -167,7 +177,7 @@ const checkAddress   = () => {
         max = 50;
     const address = formAddress.value.trim();
     if (!isBetween(address.length, min, max)) {
-        showError('klkfjdslkfjdsmlqkfjdqslkmjfds')
+        errors.push('klkfjdslkfjdsmlqkfjdqslkmjfds')
     } else {
         valid = true;
     }
@@ -179,7 +189,7 @@ const checkCity      = () => {
         max = 25;
     const city = formCity.value.trim();
     if (!isBetween(city.length, min, max)) {
-        console.log(formCity, `City must be between ${min} and ${max} characters.`)
+        errors.push(formCity, `City must be between ${min} and ${max} characters.`)
     } else {
         valid = true;
     }
@@ -187,7 +197,13 @@ const checkCity      = () => {
 };
 
 
-const contentEmailValidation     = (email) => {
+/**
+ * If the input is a string of letters, numbers, spaces, commas, apostrophes, and hyphens, then return
+ * true.
+ * @param email - /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-
+ * @returns function that takes a string and returns a boolean.
+ */
+const contentEmailValidation     = (email)     => {
     const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return re.test(email);
 };
@@ -195,15 +211,15 @@ const contentFirstNameValidation = (firstName) => {
     const re = /^[a-zA-Z]+$/;
     return re.test(firstName);
 };
-const contentLastNameValidation  = (lastName) => {
+const contentLastNameValidation  = (lastName)  => {
     const re = /^[a-zA-Z]+$/;
     return re.test(lastName);
 };
-const contentAdressValidation    = (address) => {
+const contentAdressValidation    = (address)   => {
     const re = /^[a-zA-Z0-9\s,'-]*$/;
     return re.test(address);
 };
-const contentCityValidation      = (city) => {
+const contentCityValidation      = (city)      => {
     const re = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
     return re.test(city);
 };
@@ -211,33 +227,46 @@ const contentCityValidation      = (city) => {
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
 
 
+/* Preventing the default action of the button. */
 let btnOrder = document.getElementById("order");
 btnOrder.addEventListener('click', function (e) {
     e.preventDefault();
 
-    
-    let contentFirstNameValidation = checkFirstName(),
-        contentLastNameValidation = checkLastName(),
-        contentEmailValidation = checkEmail(),
-        contentAdressValidation = checkAddress(),
-        contentCityValidation = checkCity();
 
-    let isFormValid = contentFirstNameValidation &&
-        contentLastNameValidation &&
-        contentEmailValidation &&
-        contentAdressValidation &&
-        contentCityValidation;
+  /* Checking if the form is valid. */
+    let contentFirstNameValidation = checkFirstName(),
+        contentLastNameValidation  = checkLastName(),
+        contentEmailValidation     = checkEmail(),
+        contentAdressValidation    = checkAddress(),
+        contentCityValidation      = checkCity();
+
+    let isFormValid = contentFirstNameValidation 
+    &&  contentLastNameValidation 
+    &&  contentEmailValidation 
+    &&  contentAdressValidation 
+    &&  contentCityValidation;
     if (isFormValid) {
         send();
     }
-    else { 
+    else {
         alert('Merci de vérifier que vous avez correctement rempli tous les champs');
     }
-    }
+}
 );
 
 
+/**
+ * It takes the data from the form and the cart, and sends it to the server.
+ * @returns {
+ *     "orderId": "5e8f8f8f8f8f8f8f8f8f8f8f",
+ *     "contact": {
+ *         "firstName": "John",
+ *         "lastName": "Diffool",
+ *         "email": "john@diffool.com",
+ *         "address": "123
+ */
 
+/* Taking the data from the cart and putting it in an array. */
 function generateProducts() {
     let cart = JSON.parse(localStorage.getItem('cart'));
     let products = [];
@@ -246,20 +275,22 @@ function generateProducts() {
     }
     return products;
 }
+/* Taking the data from the form and the cart, and sends it to the server. */
 function generateContact() {
     const contact = {
         firstName: formFirstName.value,
-        lastName: formLastName.value,
-        email: formEmail.value,
-        address: formAddress.value,
-        city: formCity.value,
+        lastName : formLastName.value,
+        email    : formEmail.value,
+        address  : formAddress.value,
+        city     : formCity.value,
     };
     return contact;
 }
+/* function that is waiting for the response from the server. */
 async function send() {
     let products = generateProducts();
-    let contact = generateContact();
-    let toSend = { contact, products };
+    let contact  = generateContact();
+    let toSend   = { contact, products };
     console.log(contact);
     console.log(products);
 
@@ -279,4 +310,3 @@ async function send() {
         .then(localStorage.clear())
         .catch(error => console.log(`error when data sent to server (${error.message}`));
 }
-    
