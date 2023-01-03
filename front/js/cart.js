@@ -6,10 +6,13 @@
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
+
+
 /* Updating the cart products in local storage. */
 function updateCartProducts(productList) {
     localStorage.setItem("cart", JSON.stringify(productList));
 }
+
 
 /* function that displays the content of the cart. */
 function displayCartContent() {
@@ -48,6 +51,7 @@ function displayCartContent() {
 }
 displayCartContent();
 
+
 /* Updating the quantity of the product in the cart. */
 function updatedProduct() {
     document.addEventListener('change', (event) => {
@@ -73,6 +77,7 @@ function updatedProduct() {
 }
 updatedProduct();
 
+
 /* Removing the item from the cart. */
 function removeItemFromCart() {
     document.addEventListener('click', (event) => {
@@ -97,7 +102,6 @@ function removeItemFromCart() {
     });
 }
 removeItemFromCart();
-
 
 
 /* Calculating the total price and quantity of the products in the cart. */
@@ -127,7 +131,6 @@ const formEmail     = document.getElementById('email');
 const formAddress   = document.getElementById('address');
 const formCity      = document.getElementById('city');
 const form          = document.getElementById('order');
-const errors        = [];
 
 
 /**
@@ -143,7 +146,7 @@ const checkFirstName = () => {
     const firstName = formFirstName.value.trim();
     /* Checking if the length of the input is between the min and max. */
     if (!isBetween(firstName.length, min, max)) {
-        errors.push(formFirstName, `First name must be between ${min} and ${max} characters.`)
+        alert( `Votre Prénom doit faire entre ${min} et ${max} lettres.`)
     } else {
         valid = true;
     }
@@ -155,7 +158,7 @@ const checkLastName  = () => {
         max = 25;
     const lastName = formLastName.value.trim();
     if (!isBetween(lastName.length, min, max)) {
-        errors.push(formLastName, `Last name must be between ${min} and ${max} characters.`)
+        errors.push(formLastName, `Votre Nom doit faire entre ${min} et ${max} lettres.`)
     } else {
         valid = true;
     }
@@ -165,7 +168,7 @@ const checkEmail     = () => {
     let valid = false;
     const email = formEmail.value.trim();
     if (!contentEmailValidation(email)) {
-        errors.push(formEmail, 'Email is not valid.')
+        alert('Merci de vérifier votre adresse email.')
     } else {
         valid = true;
     }
@@ -177,7 +180,7 @@ const checkAddress   = () => {
         max = 50;
     const address = formAddress.value.trim();
     if (!isBetween(address.length, min, max)) {
-        errors.push('klkfjdslkfjdsmlqkfjdqslkmjfds')
+        errors.push('Merci de vérifier votre adresse')
     } else {
         valid = true;
     }
@@ -189,7 +192,7 @@ const checkCity      = () => {
         max = 25;
     const city = formCity.value.trim();
     if (!isBetween(city.length, min, max)) {
-        errors.push(formCity, `City must be between ${min} and ${max} characters.`)
+        errors.push(formCity, `Le nom de votre ville doit faire entre ${min}  et ${max} lettres.`)
     } else {
         valid = true;
     }

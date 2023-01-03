@@ -7,6 +7,9 @@ function productCalling() {
     let id = (parsedUrl.searchParams.get("_id"));
     console.log('id=', id);
     
+    /**
+     * fetches the product's information from the database and displays it on the page.
+     */
     let productSelected = function () {
         fetch(`http://localhost:3000/api/products/${id}`)
             .then(response => response.json())
@@ -20,6 +23,7 @@ function productCalling() {
                 let description = document.getElementById("description");
                 let color       = document.getElementById("colors");
 
+              /* Displaying the product's information on the page. */
                 img.innerHTML         = `<img   src=" ${product.imageUrl}" 
                                                 alt=" ${product.altTxt}">`;
                 name.innerHTML        = `             ${product.name}`;
@@ -35,8 +39,13 @@ function productCalling() {
 productCalling();
 
 
+/* Adding an event listener to the button. */
 let button = document.getElementById("addToCart");
 button.addEventListener("click", addToCart);
+
+
+/* Taking the id of the product from the url, then it is fetching the product from the database, then
+it is displaying the product's information on the page. */
 function addToCart() {
     const parsedUrl = new URL(window.location.href);
     let id   = (parsedUrl.searchParams.get("_id"));
@@ -44,19 +53,32 @@ function addToCart() {
     if (cart === null) {
         cart = [];
     }
+    /* Creating an object with the id, quantity and color of the product. */
     let cartItem = {
         id      : id,
         quantity: document.getElementById("quantity").value,
         color   : document.getElementById("colors").value,
     };
-    cart.push(cartItem);
+    /* Checking if the user has chosen a color, if not, it will alert the user to choose a color. */
+    if (colors.value < 1) {
+        alert("Veuillez choisir une couleur");
+    }
+    /* Checking if the quantity is less than 1, if it is, it will alert the user to choose a quantity. */
+    else if (quantity.value < 1) {
+        alert("Veuillez choisir une quantité");}
+
+    /* Adding the product to the cart. */
+    else{
+    cart.push(cartItem)
     localStorage.setItem("cart", JSON.stringify(cart));
     console.log(cart);
-    alert("L'article a bien été ajouté au panier");
+    alert("L'article a bien été ajouté au panier")
+    }
+    
 }
 
     
-    console.log(localStorage.getItem("cart"));
+console.log(localStorage.getItem("cart"));
 
 
 
