@@ -1,4 +1,8 @@
 
+if (localStorage.getItem("cart") === null) {
+    document.querySelector('h1').innerHTML += " est vide";
+
+}
 /**
  * returns the cart products from local storage.
  * @returns An array of objects.
@@ -130,23 +134,25 @@ const formLastName  = document.getElementById('lastName');
 const formEmail     = document.getElementById('email');
 const formAddress   = document.getElementById('address');
 const formCity      = document.getElementById('city');
-const form          = document.getElementById('order');
+const isBetween = (length, min, max) => length < min || length > max ? false : true;
 
 
 /**
  * If the length of the input is not between the min and max, then push the input and the error message
  * to the errors array.
+ * https://www.w3schools.com/js/js_validation.asp
  * @returns The return value is the result of the last expression evaluated in the function.
  */
 const checkFirstName = () => {
     let valid = false;
     /* Declaring two constants. */
-    const min = 2,
-        max = 25;
+    const min = 2,max = 25;
     const firstName = formFirstName.value.trim();
     /* Checking if the length of the input is between the min and max. */
     if (!isBetween(firstName.length, min, max)) {
-        alert( `Votre Prénom doit faire entre ${min} et ${max} lettres.`)
+        document.getElementById('firstNameErrorMsg').innerHTML = "Merci de renseigner votre prénom";
+		document.getElementById('firstNameErrorMsg').style.display = "block";
+        return false;
     } else {
         valid = true;
     }
@@ -158,8 +164,11 @@ const checkLastName  = () => {
         max = 25;
     const lastName = formLastName.value.trim();
     if (!isBetween(lastName.length, min, max)) {
-        errors.push(formLastName, `Votre Nom doit faire entre ${min} et ${max} lettres.`)
-    } else {
+        document.getElementById('lastNameErrorMsg').innerHTML = "Merci de renseigner votre nom de famille";
+		document.getElementById('lastNameErrorMsg').style.display = "block";
+        return false;
+    }
+        else {
         valid = true;
     }
     return valid;
@@ -168,8 +177,10 @@ const checkEmail     = () => {
     let valid = false;
     const email = formEmail.value.trim();
     if (!contentEmailValidation(email)) {
-        alert('Merci de vérifier votre adresse email.')
-    } else {
+        document.getElementById('emailErrorMsg').innerHTML = "Merci de renseigner une adresse mail valide";
+		document.getElementById('emailErrorMsg').style.display = "block";
+        return false;}
+    else {
         valid = true;
     }
     return valid;
@@ -180,8 +191,11 @@ const checkAddress   = () => {
         max = 50;
     const address = formAddress.value.trim();
     if (!isBetween(address.length, min, max)) {
-        errors.push('Merci de vérifier votre adresse')
-    } else {
+        document.getElementById('addressErrorMsg').innerHTML = `Votre adresse doit faire entre ${min}  et ${max} lettres.`;
+		document.getElementById('addressErrorMsg').style.display = "block";
+        return false;
+    } 
+    else {
         valid = true;
     }
     return valid;
@@ -192,8 +206,11 @@ const checkCity      = () => {
         max = 25;
     const city = formCity.value.trim();
     if (!isBetween(city.length, min, max)) {
-        errors.push(formCity, `Le nom de votre ville doit faire entre ${min}  et ${max} lettres.`)
-    } else {
+        document.getElementById('cityErrorMsg').innerHTML = `Le nom de votre ville doit faire entre ${min}  et ${max} lettres.`;
+		document.getElementById('cityErrorMsg').style.display = "block";
+        return false;
+    } 
+    else {
         valid = true;
     }
     return valid;
@@ -227,16 +244,11 @@ const contentCityValidation      = (city)      => {
     return re.test(city);
 };
 
-const isBetween = (length, min, max) => length < min || length > max ? false : true;
-
-
-/* Preventing the default action of the button. */
 let btnOrder = document.getElementById("order");
 btnOrder.addEventListener('click', function (e) {
     e.preventDefault();
 
 
-  /* Checking if the form is valid. */
     let contentFirstNameValidation = checkFirstName(),
         contentLastNameValidation  = checkLastName(),
         contentEmailValidation     = checkEmail(),
@@ -244,10 +256,10 @@ btnOrder.addEventListener('click', function (e) {
         contentCityValidation      = checkCity();
 
     let isFormValid = contentFirstNameValidation 
-    &&  contentLastNameValidation 
-    &&  contentEmailValidation 
-    &&  contentAdressValidation 
-    &&  contentCityValidation;
+        &&  contentLastNameValidation 
+        &&  contentEmailValidation 
+        &&  contentAdressValidation 
+        &&  contentCityValidation;
     if (isFormValid) {
         send();
     }
@@ -313,3 +325,4 @@ async function send() {
         .then(localStorage.clear())
         .catch(error => console.log(`error when data sent to server (${error.message}`));
 }
+
