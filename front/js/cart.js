@@ -127,149 +127,174 @@ function totalPriceQuantityCalculation() {
 }
 totalPriceQuantityCalculation();
 
+const contentFirstName = document.getElementById('firstName');
+const contentLastName  = document.getElementById('lastName');
+const contentEmail     = document.getElementById('email');
+const contentAdress    = document.getElementById('adress');
+const contentCity      = document.getElementById('city');
 
 
-const formFirstName = document.getElementById('firstName');
-const formLastName  = document.getElementById('lastName');
-const formEmail     = document.getElementById('email');
-const formAddress   = document.getElementById('address');
-const formCity      = document.getElementById('city');
+
+const form = document.querySelector('cart__order__form');
+
+
+const checkFirstName = () => {
+
+    let valid = false;
+
+    const min = 3,
+        max = 25;
+
+    const username = usernameEl.value.trim();
+
+    if (!isRequired(username)) {
+        showError(usernameEl, 'Username cannot be blank.');
+    } else if (!isBetween(username.length, min, max)) {
+        showError(usernameEl, `Username must be between ${min} and ${max} characters.`)
+    } else {
+        showSuccess(usernameEl);
+        valid = true;
+    }
+    return valid;
+};
+
+const checkLastName = () => {
+    let valid = false;
+    const email = contentEmail.value.trim();
+    if (!isRequired(email)) {
+        showError(contentEmail, 'Email cannot be blank.');
+    } else if (!isEmailValid(email)) {
+        showError(contentEmail, 'Email is not valid.')
+    } else {
+        showSuccess(contentEmail);
+        valid = true;
+    }
+    return valid;
+};
+
+const checkPassword = () => {
+    let valid = false;
+
+
+    const password = passwordEl.value.trim();
+
+    if (!isRequired(password)) {
+        showError(passwordEl, 'Password cannot be blank.');
+    } else if (!isPasswordSecure(password)) {
+        showError(passwordEl, 'Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)');
+    } else {
+        showSuccess(passwordEl);
+        valid = true;
+    }
+
+    return valid;
+};
+const checkLastName = () => {
+    let valid = false;
+    const email = contentEmail.value.trim();
+    if (!isRequired(email)) {
+        showError(contentEmail, 'Email cannot be blank.');
+    } else if (!isEmailValid(email)) {
+        showError(contentEmail, 'Email is not valid.')
+    } else {
+        showSuccess(contentEmail);
+        valid = true;
+    }
+    return valid;
+};
+
+
+
+const isEmailValid = (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+};
+
+
+const isRequired = value => value === '' ? false : true;
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
 
 
-/**
- * If the length of the input is not between the min and max, then push the input and the error message
- * to the errors array.
- * https://www.w3schools.com/js/js_validation.asp
- * @returns The return value is the result of the last expression evaluated in the function.
- */
-const checkFirstName = () => {
-    let valid = false;
-    /* Declaring two constants. */
-    const min = 2,max = 25;
-    const firstName = formFirstName.value.trim();
-    /* Checking if the length of the input is between the min and max. */
-    if (!isBetween(firstName.length, min, max)) {
-        document.getElementById('firstNameErrorMsg').innerHTML = "Merci de renseigner votre prénom";
-		document.getElementById('firstNameErrorMsg').style.display = "block";
-        return false;
-    } else {
-        valid = true;
-    }
-    return valid;
-};
-const checkLastName  = () => {
-    let valid = false;
-    const min = 2,
-        max = 25;
-    const lastName = formLastName.value.trim();
-    if (!isBetween(lastName.length, min, max)) {
-        document.getElementById('lastNameErrorMsg').innerHTML = "Merci de renseigner votre nom de famille";
-		document.getElementById('lastNameErrorMsg').style.display = "block";
-        return false;
-    }
-        else {
-        valid = true;
-    }
-    return valid;
-};
-const checkEmail     = () => {
-    let valid = false;
-    const email = formEmail.value.trim();
-    if (!contentEmailValidation(email)) {
-        document.getElementById('emailErrorMsg').innerHTML = "Merci de renseigner une adresse mail valide";
-		document.getElementById('emailErrorMsg').style.display = "block";
-        return false;}
-    else {
-        valid = true;
-    }
-    return valid;
-};
-const checkAddress   = () => {
-    let valid = false;
-    const min = 5,
-        max = 50;
-    const address = formAddress.value.trim();
-    if (!isBetween(address.length, min, max)) {
-        document.getElementById('addressErrorMsg').innerHTML = `Votre adresse doit faire entre ${min}  et ${max} lettres.`;
-		document.getElementById('addressErrorMsg').style.display = "block";
-        return false;
-    } 
-    else {
-        valid = true;
-    }
-    return valid;
-};
-const checkCity      = () => {
-    let valid = false;
-    const min = 2,
-        max = 25;
-    const city = formCity.value.trim();
-    if (!isBetween(city.length, min, max)) {
-        document.getElementById('cityErrorMsg').innerHTML = `Le nom de votre ville doit faire entre ${min}  et ${max} lettres.`;
-		document.getElementById('cityErrorMsg').style.display = "block";
-        return false;
-    } 
-    else {
-        valid = true;
-    }
-    return valid;
+const showError = (input, message) => {
+    // get the form-field element
+    const formField = input.parentElement;
+    // add the error class
+    formField.classList.remove('success');
+    formField.classList.add('error');
+
+    // show the error message
+    const error = formField.querySelector('small');
+    error.textContent = message;
 };
 
+const showSuccess = (input) => {
+    // get the form-field element
+    const formField = input.parentElement;
 
-/**
- * If the input is a string of letters, numbers, spaces, commas, apostrophes, and hyphens, then return
- * true.
- * @param email - /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-
- * @returns function that takes a string and returns a boolean.
- */
-const contentEmailValidation     = (email)     => {
-    const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    return re.test(email);
-};
-const contentFirstNameValidation = (firstName) => {
-    const re = /^[a-zA-Z]+$/;
-    return re.test(firstName);
-};
-const contentLastNameValidation  = (lastName)  => {
-    const re = /^[a-zA-Z]+$/;
-    return re.test(lastName);
-};
-const contentAdressValidation    = (address)   => {
-    const re = /^[a-zA-Z0-9\s,'-]*$/;
-    return re.test(address);
-};
-const contentCityValidation      = (city)      => {
-    const re = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
-    return re.test(city);
-};
+    // remove the error class
+    formField.classList.remove('error');
+    formField.classList.add('success');
 
-let btnOrder = document.getElementById("order");
-btnOrder.addEventListener('click', function (e) {
+    // hide the error message
+    const error = formField.querySelector('small');
+    error.textContent = '';
+}
+
+
+form.addEventListener('submit', function (e) {
+    // prevent the form from submitting
     e.preventDefault();
 
+    // validate fields
+    let isUsernameValid = checkUsername(),
+        isEmailValid = checkEmail(),
+        isPasswordValid = checkPassword(),
+        isConfirmPasswordValid = checkConfirmPassword();
 
-    let contentFirstNameValidation = checkFirstName(),
-        contentLastNameValidation  = checkLastName(),
-        contentEmailValidation     = checkEmail(),
-        contentAdressValidation    = checkAddress(),
-        contentCityValidation      = checkCity();
+    let isFormValid = isUsernameValid &&
+        isEmailValid &&
+        isPasswordValid &&
+        isConfirmPasswordValid;
 
-    let isFormValid = contentFirstNameValidation 
-        &&  contentLastNameValidation 
-        &&  contentEmailValidation 
-        &&  contentAdressValidation 
-        &&  contentCityValidation;
+    // submit to the server if the form is valid
     if (isFormValid) {
+
+    }
+});
+
+
+const debounce = (fn, delay = 500) => {
+    let timeoutId;
+    return (...args) => {
+        // cancel the previous timer
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        // setup a new timer
+        timeoutId = setTimeout(() => {
+            fn.apply(null, args)
+        }, delay);
+    };
+};
+
+form.addEventListener('input', debounce(function (e) {
+    switch (e.target.id) {
+        case 'username':
+            checkUsername();
+            break;
+        case 'email':
+            checkEmail();
+            break;
+        case 'password':
+            checkPassword();
+            break;
+        case 'confirm-password':
+            checkConfirmPassword();
+            break;
+    }
+}));
         send();
-    }
-    else {
-        alert('Merci de vérifier que vous avez correctement rempli tous les champs');
-    }
-}
-);
-
-
+    
 /**
  * It takes the data from the form and the cart, and sends it to the server.
  * @returns {
