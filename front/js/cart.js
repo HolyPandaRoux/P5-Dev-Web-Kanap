@@ -1,11 +1,14 @@
 
+/* Checking if the localStorage is empty. If it is, it will add the text " est vide" to the h1 tag. */
 if (localStorage.getItem("cart") === null) {
     document.querySelector('h1').innerHTML += " est vide";
-
 }
+
+
+
 /**
  * returns the cart products from local storage.
- * @returns An array of objects.
+ * returns An array of objects.
  */
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
@@ -129,21 +132,24 @@ totalPriceQuantityCalculation();
 
 
 
+let regexName       = /^[a-zA-Z]+$/;
+let regexLastName   = /^[a-zA-Z]+$/;
+let regexEmail      = /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/;
+let regexAdress     = /^[a-zA-Z0-9\s,'-]*$/;
+let regexCity       = /^[a-zA-Z\s,'-]*$/;
 const formFirstName = document.getElementById('firstName');
 const formLastName  = document.getElementById('lastName');
 const formEmail     = document.getElementById('email');
 const formAddress   = document.getElementById('address');
 const formCity      = document.getElementById('city');
-const isBetween = (length, min, max) => length < min || length > max ? false : true;
+const isBetween     = (length, min, max) => length < min || length > max ? false : true;
 
 
 /**
- * If the length of the input is not between the min and max, then push the input and the error message
- * to the errors array.
- * https://www.w3schools.com/js/js_validation.asp
- * @returns The return value is the result of the last expression evaluated in the function.
+ * It checks if the length of the input is between the min and max.
+ * returns a boolean value.
  */
-const checkFirstName = () => {
+const checkFirstName      = () => {
     let valid = false;
     /* Declaring two constants. */
     const min = 2,max = 25;
@@ -151,41 +157,37 @@ const checkFirstName = () => {
     /* Checking if the length of the input is between the min and max. */
     if (!isBetween(firstName.length, min, max)) {
         document.getElementById('firstNameErrorMsg').innerHTML = "Merci de renseigner votre prénom";
-		document.getElementById('firstNameErrorMsg').style.display = "block";
         return false;
     } else {
         valid = true;
     }
     return valid;
 };
-const checkLastName  = () => {
+const checkLastName       = () => {
     let valid = false;
-    const min = 2,
-        max = 25;
+    const min = 2,max = 25;
     const lastName = formLastName.value.trim();
     if (!isBetween(lastName.length, min, max)) {
         document.getElementById('lastNameErrorMsg').innerHTML = "Merci de renseigner votre nom de famille";
-		document.getElementById('lastNameErrorMsg').style.display = "block";
         return false;
-    }
-        else {
+    } else {
         valid = true;
     }
     return valid;
 };
-const checkEmail     = () => {
+const checkEmail          = () => {
     let valid = false;
+    const min = 2,max = 25;
     const email = formEmail.value.trim();
-    if (!contentEmailValidation(email)) {
+    if (!isBetween(email.length, min, max)) {
         document.getElementById('emailErrorMsg').innerHTML = "Merci de renseigner une adresse mail valide";
-		document.getElementById('emailErrorMsg').style.display = "block";
         return false;}
     else {
         valid = true;
     }
     return valid;
 };
-const checkAddress   = () => {
+const checkAddress        = () => {
     let valid = false;
     const min = 5,
         max = 50;
@@ -200,14 +202,13 @@ const checkAddress   = () => {
     }
     return valid;
 };
-const checkCity      = () => {
+const checkCity           = () => {
     let valid = false;
     const min = 2,
         max = 25;
     const city = formCity.value.trim();
     if (!isBetween(city.length, min, max)) {
         document.getElementById('cityErrorMsg').innerHTML = `Le nom de votre ville doit faire entre ${min}  et ${max} lettres.`;
-		document.getElementById('cityErrorMsg').style.display = "block";
         return false;
     } 
     else {
@@ -215,53 +216,84 @@ const checkCity      = () => {
     }
     return valid;
 };
-
-
 /**
- * If the input is a string of letters, numbers, spaces, commas, apostrophes, and hyphens, then return
- * true.
- * @param email - /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-
- * @returns function that takes a string and returns a boolean.
- */
-const contentEmailValidation     = (email)     => {
-    const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    return re.test(email);
+ * The function checkFirstNameRegex() is called when the user clicks the submit button. It checks if
+ * the value of the input field formFirstName matches the regex regexName. If it doesn't, it displays
+ * an error message. If it does, it returns true.
+**/
+const checkFirstNameRegex = () => {
+    let valid = false;
+formFirstName.addEventListener('input', checkFirstName);
+if (regexName.test(formFirstName.value) == false) {
+    document.getElementById('firstNameErrorMsg').innerHTML = "Merci de vérifier la saisie de votre prénom";
+} else {
+    valid = true;
+}
+return valid;
 };
-const contentFirstNameValidation = (firstName) => {
-    const re = /^[a-zA-Z]+$/;
-    return re.test(firstName);
+const checkLastNameRegex  = () => {
+    let valid=false;
+formLastName.addEventListener('input', checkLastName);
+if (regexLastName.test(formLastName.value) == false) {
+    document.getElementById('lastNameErrorMsg').innerHTML = "Merci de vérifier la saisie de votre nom de famille";
+} else {
+    valid = true;
+}
+return valid;
 };
-const contentLastNameValidation  = (lastName)  => {
-    const re = /^[a-zA-Z]+$/;
-    return re.test(lastName);
+const checkEmailRegex     = () => {
+    let valid = false;
+formEmail.addEventListener('input', checkEmail);
+if (regexEmail.test(formEmail.value) == false) {
+    document.getElementById('emailErrorMsg').innerHTML = "Merci de vérfier que votre mail est valide";
+} else {
+    valid = true;
+}
+return valid;
 };
-const contentAdressValidation    = (address)   => {
-    const re = /^[a-zA-Z0-9\s,'-]*$/;
-    return re.test(address);
+const checkAddressRegex   = () => {
+    let valid = false;
+formAddress.addEventListener('input', checkAddress);
+if (regexAdress.test(formAddress.value) == false) {
+    document.getElementById('addressErrorMsg').innerHTML = "Merci de vérifier la saisie de votre adresse";
+} else {
+    valid = true;
+}
+return valid;
 };
-const contentCityValidation      = (city)      => {
-    const re = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
-    return re.test(city);
+const checkCityRegex      = () => {
+    let valid = false;
+formCity.addEventListener('input', checkCity);
+if (regexCity.test(formCity.value) == false) {
+    document.getElementById('cityErrorMsg').innerHTML = "Merci de vérifier la saisie de votre ville";
+} else {
+    valid = true;
+}
+return valid;
 };
 
+
+
+/* Adding an event listener to the button. */
 let btnOrder = document.getElementById("order");
 btnOrder.addEventListener('click', function (e) {
     e.preventDefault();
 
 
-    let contentFirstNameValidation = checkFirstName(),
-        contentLastNameValidation  = checkLastName(),
-        contentEmailValidation     = checkEmail(),
-        contentAdressValidation    = checkAddress(),
-        contentCityValidation      = checkCity();
-
-    let isFormValid = contentFirstNameValidation 
-        &&  contentLastNameValidation 
-        &&  contentEmailValidation 
-        &&  contentAdressValidation 
-        &&  contentCityValidation;
+    let isFormValid = 
+        checkAddressRegex()   && 
+        checkCityRegex()      && 
+        checkEmailRegex()     && 
+        checkFirstNameRegex() && 
+        checkLastNameRegex()  &&
+        checkFirstName()      &&
+        checkLastName()       &&
+        checkEmail()          &&
+        checkAddress()        &&
+        checkCity();
     if (isFormValid) {
         send();
+        alert("Merci de votre confiance, votre commande a été validé")
     }
     else {
         alert('Merci de vérifier que vous avez correctement rempli tous les champs');
@@ -269,10 +301,9 @@ btnOrder.addEventListener('click', function (e) {
 }
 );
 
-
 /**
  * It takes the data from the form and the cart, and sends it to the server.
- * @returns {
+ * returns {
  *     "orderId": "5e8f8f8f8f8f8f8f8f8f8f8f",
  *     "contact": {
  *         "firstName": "John",
@@ -290,6 +321,8 @@ function generateProducts() {
     }
     return products;
 }
+
+
 /* Taking the data from the form and the cart, and sends it to the server. */
 function generateContact() {
     const contact = {
@@ -301,6 +334,8 @@ function generateContact() {
     };
     return contact;
 }
+
+
 /* function that is waiting for the response from the server. */
 async function send() {
     let products = generateProducts();
@@ -309,6 +344,7 @@ async function send() {
     console.log(contact);
     console.log(products);
 
+    /* Sending a POST request to the server with the data toSend. */
     await fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
         headers: {
@@ -317,6 +353,8 @@ async function send() {
         body: JSON.stringify(toSend)
 
     })
+        /* The above code is sending the data to the server and then redirecting the user to the
+        confirmation page. */
         .then(response => response.json())
         .then(bodyResponse => {
             window.location.href = `./confirmation.html?orderid=${bodyResponse.orderId}`;
