@@ -132,11 +132,11 @@ totalPriceQuantityCalculation();
 
 
 
-let regexName       = /^[a-zA-Z]+$/;
-let regexLastName   = /^[a-zA-Z]+$/;
-let regexEmail      = /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/;
-let regexAdress     = /^[a-zA-Z0-9\s,'-]*$/;
-let regexCity       = /^[a-zA-Z\s,'-]*$/;
+let regexName       = /^[a-z\d]$/i;
+let regexLastName   = /^[a-z\d]$/i;
+let regexEmail      = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
+let regexAdress     = /^[a-z\d]{5,12}$/i;
+let regexCity       = /^[a-z\d]$/i;
 const formFirstName = document.getElementById('firstName');
 const formLastName  = document.getElementById('lastName');
 const formEmail     = document.getElementById('email');
@@ -152,7 +152,7 @@ const isBetween     = (length, min, max) => length < min || length > max ? false
 const checkFirstName      = () => {
     let valid = false;
     /* Declaring two constants. */
-    const min = 2,max = 25;
+    const min = 5,max = 20;
     const firstName = formFirstName.value.trim();
     /* Checking if the length of the input is between the min and max. */
     if (!isBetween(firstName.length, min, max)) {
@@ -165,7 +165,7 @@ const checkFirstName      = () => {
 };
 const checkLastName       = () => {
     let valid = false;
-    const min = 2,max = 25;
+    const min = 5,max = 20;
     const lastName = formLastName.value.trim();
     if (!isBetween(lastName.length, min, max)) {
         document.getElementById('lastNameErrorMsg').innerHTML = "Merci de renseigner votre nom de famille";
@@ -177,7 +177,7 @@ const checkLastName       = () => {
 };
 const checkEmail          = () => {
     let valid = false;
-    const min = 2,max = 25;
+    const min = 5,max = 16;
     const email = formEmail.value.trim();
     if (!isBetween(email.length, min, max)) {
         document.getElementById('emailErrorMsg').innerHTML = "Merci de renseigner une adresse mail valide";
