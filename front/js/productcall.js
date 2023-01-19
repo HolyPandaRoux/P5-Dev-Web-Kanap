@@ -5,34 +5,29 @@
 function productCalling() {
     const parsedUrl = new URL(window.location.href);
     let id = (parsedUrl.searchParams.get("_id"));
-    console.log('id=', id);
-    
-    /**
-     * fetches the product's information from the database and displays it on the page.
-     */
+
+
     let productSelected = function () {
         fetch(`http://localhost:3000/api/products/${id}`)
             .then(response => response.json())
             //   .then((response) => response.json())
             .then((product) => {
-                console.log(product);
-                let img         = document.querySelector(".item__img");
-                let name        = document.getElementById("title");
-                let title       = document.querySelector("title");
-                let price       = document.getElementById("price");
-                let description = document.getElementById("description");
-                let color       = document.getElementById("colors");
 
-              /* Displaying the product's information on the page. */
-                img.innerHTML         = `<img   src=" ${product.imageUrl}" 
-                                                alt=" ${product.altTxt}">`;
-                name.innerHTML        = `             ${product.name}`;
-                title.innerHTML       = `             ${product.name}`;
-                price.innerHTML       = `             ${product.price}`;
-                description.innerHTML = `             ${product.description}`;for (i = 0; i < product.colors.length; i++) {
-                color.innerHTML      += `<option value="${product.colors[i]}">${product.colors[i]}</option>`;
+                createElement("img", "item__img", "item__img", product.imageUrl, product.altTxt);
+                createElement("h2", "title", "title", product.name);
+                createElement("p", "price", "price", product.price);
+                createElement("p", "description", "description", product.description);
+                createElement("select", "colors", "colors", product.colors);
+                document.getElementById("colors").appendChild(createElement("option", "colors", "colors", "Choisissez une couleur"));
+                for (let i = 0; i < product.colors.length; i++) {
+                    document.getElementById("colors").appendChild(createElement("option", "colors", "colors", product.colors[i]));
                 }
-            });
+                createElement("input", "quantity", "quantity", "1");
+                createElement("button", "addToCart", "addToCart", "Ajouter au panier");
+            
+              
+                }
+            );
     };
     productSelected();
 }
@@ -71,14 +66,11 @@ function addToCart() {
     else{
     cart.push(cartItem)
     localStorage.setItem("cart", JSON.stringify(cart));
-    console.log(cart);
     alert("L'article a bien été ajouté au panier")
     }
     
 }
 
-    
-console.log(localStorage.getItem("cart"));
 
 
 
