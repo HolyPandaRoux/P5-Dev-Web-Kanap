@@ -4,9 +4,10 @@ if (localStorage.getItem("cart") === null) {
     document.querySelector('h1').innerHTML += " est vide";
 }
 
-
-
-
+/**
+ * returns the cart products from local storage.
+ * returns An array of objects.
+ */
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
@@ -27,9 +28,9 @@ function displayCartContent() {
         await fetch("http://localhost:3000/api/products/" + cartProduct.id)
             .then((res) => res.json())
             .then(product => {
-                document.querySelector("#cart__items").innerHTML +=
-                    //display for each product the data , depending of the location of the data cartProduct for localStorage data et product for api data
-                    `<article class="cart__item" data-id="${product._id}"  data-color="${cartProduct.color}">
+                const elem = document.querySelector("#cart__items");
+                let htmlProduct = `
+                <article class="cart__item" data-id="${product._id}"  data-color="${cartProduct.color}">
                 <div class="cart__item__img">
                         <img src="${product.imageUrl}" alt="${product.altTxt}">
                         </div>
@@ -37,7 +38,6 @@ function displayCartContent() {
                         <div class="cart__item__content__description"> 
                             <h2>${product.name}</h2>
                             <p>${cartProduct.color}</p>
-                            <p>${product.price},00 €</p>
                         </div>
                         <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
@@ -49,10 +49,15 @@ function displayCartContent() {
                         </div>
                     </div>
                 </div>
-            </article>`;
+            </article>`
+                elem.insertAdjacentHTML("beforeend", htmlProduct)
             });
     });
 }
+
+            
+
+
 displayCartContent();
 
 
@@ -107,24 +112,33 @@ function removeItemFromCart() {
 }
 removeItemFromCart();
 
-
-/* Calculating the total price and quantity of the products in the cart. */
 function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
     let totalPrice = 0;
     let totalQuantity = 0;
-    productsPanier.forEach(async (cartProduct) => {
-        await fetch("http://localhost:3000/api/products/" + cartProduct.id)
+    
+                productsPanier.forEach(async (cartProduct) => {
+                    await fetch("http://localhost:3000/api/products/" + cartProduct.id)
+                        .then((res) => res.json())
+                        .then(product => 
+                            {    // total item quantity
+                            totalQuantity += Number(cartProduct.quantity);
+                            // total price
+                            totalPrice = Number(totalPrice) + Number(product.price) * Number(cartProduct.quantity);
+                            if (cartProduct.quantity > 100 ) {
+                                totalQuantity -= Number(cartProduct.quantity);
+                                alert("Vous ne pouvez pas commander plus de 100 produits");
+                                cartProduct.quantity = 0;
+                            
+                            }
+            
+                        })
+                    document.querySelector("#totalPrice").textContent = totalPrice;
+                    document.querySelector("#totalQuantity").textContent = totalQuantity;
 
-            .then((res) => res.json())
-            .then(product => {
-                totalPrice += product.price * cartProduct.quantity;
-                totalQuantity += cartProduct.quantity;
-                document.querySelector("#totalPrice").innerHTML = +totalPrice + ",00 €";
-                document.querySelector("#totalQuantity").innerHTML = +totalQuantity;
             });
-    });
-}
+    }
+
 totalPriceQuantityCalculation();
 
 
@@ -298,16 +312,7 @@ btnOrder.addEventListener('click', function (e) {
 }
 );
 
-/**
- * It takes the data from the form and the cart, and sends it to the server.
- * returns {
- *     "orderId": "5e8f8f8f8f8f8f8f8f8f8f8f",
- *     "contact": {
- *         "firstName": "John",
- *         "lastName": "Diffool",
- *         "email": "john@diffool.com",
- *         "address": "123
- */
+
 
 /* Taking the data from the cart and putting it in an array. */
 function generateProducts() {

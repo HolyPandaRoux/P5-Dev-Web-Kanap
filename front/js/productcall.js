@@ -5,29 +5,33 @@
 function productCalling() {
     const parsedUrl = new URL(window.location.href);
     let id = (parsedUrl.searchParams.get("_id"));
-
-
+    console.log('id=', id);
+    
+    /**
+     * fetches the product's information from the database and displays it on the page.
+     */
     let productSelected = function () {
         fetch(`http://localhost:3000/api/products/${id}`)
             .then(response => response.json())
             //   .then((response) => response.json())
             .then((product) => {
-
-                createElement("img", "item__img", "item__img", product.imageUrl, product.altTxt);
-                createElement("h2", "title", "title", product.name);
-                createElement("p", "price", "price", product.price);
-                createElement("p", "description", "description", product.description);
-                createElement("select", "colors", "colors", product.colors);
-                document.getElementById("colors").appendChild(createElement("option", "colors", "colors", "Choisissez une couleur"));
-                for (let i = 0; i < product.colors.length; i++) {
-                    document.getElementById("colors").appendChild(createElement("option", "colors", "colors", product.colors[i]));
+                console.log(product);
+                let img         = document.querySelector(".item__img");
+                let name        = document.getElementById("title");
+                let title       = document.querySelector("title");
+                let price       = document.getElementById("price");
+                let description = document.getElementById("description");
+                let color       = document.getElementById("colors");
+                
+                img.innerHTML         = `<img   src=" ${product.imageUrl}" 
+                                                alt=" ${product.altTxt}">`;
+                name.innerHTML        = `             ${product.name}`;
+                title.innerHTML       = `             ${product.name}`;
+                price.innerHTML       = `             ${product.price}`;
+                description.innerHTML = `             ${product.description}`;for (i = 0; i < product.colors.length; i++) {
+                color.innerHTML      += `<option value="${product.colors[i]}">${product.colors[i]}</option>`;
                 }
-                createElement("input", "quantity", "quantity", "1");
-                createElement("button", "addToCart", "addToCart", "Ajouter au panier");
-            
-              
-                }
-            );
+            });
     };
     productSelected();
 }
@@ -54,23 +58,40 @@ function addToCart() {
         quantity: document.getElementById("quantity").value,
         color   : document.getElementById("colors").value,
     };
+    // check if the product already exits in the cart and if it does, it will add the quantity to the existing quantity.
+    if (colors.value == cartItem.color)
     /* Checking if the user has chosen a color, if not, it will alert the user to choose a color. */
     if (colors.value < 1) {
         alert("Veuillez choisir une couleur");
     }
     /* Checking if the quantity is less than 1, if it is, it will alert the user to choose a quantity. */
     else if (quantity.value < 1) {
-        alert("Veuillez choisir une quantité");}
+        alert("Veuillez choisir une quantité entre 1 et 100");}
+    else if ( quantity.value > 100) {
+        alert("Veuillez choisir une quantité entre 1 et 100")
+        quantity.value = 0;}
 
     /* Adding the product to the cart. */
     else{
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].id == cartItem.id && cart[i].color == cartItem.color) {
+                cart[i].quantity = parseInt(cart[i].quantity) + parseInt(cartItem.quantity);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                console.log(cart);
+                alert("L'article a bien été ajouté au panier")
+                return;
+            }
+        }
     cart.push(cartItem)
     localStorage.setItem("cart", JSON.stringify(cart));
+    console.log(cart);
     alert("L'article a bien été ajouté au panier")
     }
     
 }
 
+    
+console.log(localStorage.getItem("cart"));
 
 
 

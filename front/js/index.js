@@ -17,11 +17,9 @@ console.log("erreur 404 Vérifier le statut du serveur/ adresse /  fonction fetc
 
 /* Creating a function that will display all the items in the index. */
 function allItems(index) {// https://chartio.com/learn/databases/how-does-indexing-work/
-    let displayZone = document.querySelector("#items");
     for (let article of index) {
-        
-        
-        displayZone.innerHTML +=
+        const elem = document.querySelector("#items");
+        let htmlIndex = 
                 `
             <a href="./product.html?_id=${article._id}">
                 <article>
@@ -32,6 +30,6 @@ function allItems(index) {// https://chartio.com/learn/databases/how-does-indexi
                 </article>
             </a>
         `
-        ;
+        elem.insertAdjacentHTML("beforeend", htmlIndex);     
     }
 }
