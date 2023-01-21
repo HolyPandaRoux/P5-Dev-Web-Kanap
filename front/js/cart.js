@@ -4,10 +4,7 @@ if (localStorage.getItem("cart") === null) {
     document.querySelector('h1').innerHTML += " est vide";
 }
 
-/**
- * returns the cart products from local storage.
- * returns An array of objects.
- */
+
 function getCartProducts() {
     return JSON.parse(localStorage.getItem("cart"));
 }
@@ -54,10 +51,6 @@ function displayCartContent() {
             });
     });
 }
-
-            
-
-
 displayCartContent();
 
 
@@ -111,6 +104,7 @@ function removeItemFromCart() {
     });
 }
 removeItemFromCart();
+
 
 function totalPriceQuantityCalculation() {
     let productsPanier = getCartProducts();
@@ -284,7 +278,6 @@ return valid;
 };
 
 
-
 /* Adding an event listener to the button. */
 let btnOrder = document.getElementById("order");
 btnOrder.addEventListener('click', function (e) {
@@ -311,7 +304,6 @@ btnOrder.addEventListener('click', function (e) {
     }
 }
 );
-
 
 
 /* Taking the data from the cart and putting it in an array. */

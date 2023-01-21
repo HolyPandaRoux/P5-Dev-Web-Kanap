@@ -5,7 +5,7 @@
 function getOrderId(){
     let searchParams = new URL(location.href).searchParams
     let orderId = searchParams.get("orderid") 
-    document.querySelector("#orderId").innerText = orderId
-    clearCart();
+    document.querySelector("#orderId").innerText = orderId;
+    localStorage.clear();
 }
 getOrderId()
